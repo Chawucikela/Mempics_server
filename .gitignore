@@ -29,7 +29,7 @@ mvnw*
 /nbdist/
 /.nb-gradle/
 build/
-src/main/resources/application-dev.properties
+target/classes/application-dev.properties
 
 ### VS Code ###
 .vscode/
