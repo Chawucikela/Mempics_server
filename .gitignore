@@ -19,6 +19,7 @@ target/
 *.iws
 *.iml
 *.ipr
+*.properties
 .mvn
 mvnw*
 
@@ -29,7 +30,7 @@ mvnw*
 /nbdist/
 /.nb-gradle/
 build/
-target/classes/application-dev.properties
+/target/
 
 ### VS Code ###
 .vscode/
