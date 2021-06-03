@@ -13,4 +13,7 @@ public interface ErrorCode {
     // 业务异常
     int STOCK_NOT_ENOUGH = 201;
 
+    //
+    int FILE_UPLOAD_FAILURE = 301;
+
 }
