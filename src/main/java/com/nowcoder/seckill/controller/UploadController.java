@@ -5,6 +5,7 @@ import com.nowcoder.seckill.common.ErrorCode;
 import com.nowcoder.seckill.common.ResponseModel;
 import com.nowcoder.seckill.common.Toolbox;
 import com.nowcoder.seckill.entity.User;
+import com.nowcoder.seckill.service.FileService;
 import com.nowcoder.seckill.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -19,26 +20,21 @@ import java.util.Random;
 import java.io.*;
 
 @Controller
-@RequestMapping("/upload")
+@RequestMapping("/file")
 @CrossOrigin(origins = "${nowcoder.web.path}", allowedHeaders = "*", allowCredentials = "true")
-public class UploadController {
+public class UploadController implements ErrorCode {
+    @Autowired
+    private FileService fileService;
 
     @RequestMapping(value="/uploadPage")
     public String uploadPage(){
         return "uploadPage";
     }
 
-    @RequestMapping(value="/upload")
-    public ResponseModel upload(@RequestParam("name") String name,@RequestParam("file") MultipartFile file) {
-        if (!file.isEmpty()) {
-            try {
-                file.transferTo(new File("d:/tem/" + file.getOriginalFilename()));
-            } catch (IOException e) {
-                return new ResponseModel();
-            }
-            return new ResponseModel();
-        } else {
-            return new ResponseModel();
-        }
+    @RequestMapping(value="/upload", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseModel upload(@RequestParam("file") MultipartFile file) {
+        fileService.save(file);
+        return new ResponseModel();
     }
 }
