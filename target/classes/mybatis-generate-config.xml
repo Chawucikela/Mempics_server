@@ -5,7 +5,7 @@
 <generatorConfiguration>
     <context id="simple" targetRuntime="MyBatis3Simple">
         <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
-                        connectionURL="jdbc:mysql://139.9.119.64:3306/seckill?characterEncoding=utf-8&amp;useSSL=false&amp;serverTimezone=Hongkong"
+                        connectionURL="jdbc:mysql://106.13.200.23:3306/zero?characterEncoding=utf-8&amp;useSSL=false&amp;serverTimezone=Hongkong"
                         userId="root" password="123456"/>
 
         <javaModelGenerator targetPackage="com.nowcoder.seckill.entity" targetProject="src/main/java">
@@ -16,7 +16,7 @@
 
         <javaClientGenerator type="XMLMAPPER" targetPackage="com.nowcoder.seckill.dao" targetProject="src/main/java"/>
 
-        <!--
+
         <table tableName="item" domainObjectName="Item"
                enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" >
             <generatedKey column="ID" sqlStatement="MYSQL" identity="true" />
@@ -46,7 +46,10 @@
         <table tableName="serial_number" domainObjectName="SerialNumber"
                enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" >
         </table>
-        -->
+        <table tableName="share_records" domainObjectName="ShareRecords"
+               enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" >
+            <columnOverride column="share_time" jdbcType="TIMESTAMP" javaType="java.sql.Timestamp" />
+        </table>
 
     </context>
 </generatorConfiguration>
