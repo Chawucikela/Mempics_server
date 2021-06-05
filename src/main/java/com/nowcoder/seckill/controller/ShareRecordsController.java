@@ -67,8 +67,7 @@ public class ShareRecordsController implements ErrorCode {
         if (user == null) {
             throw new BusinessException(USER_NOT_LOGIN, "请先登录！");
         }
-
-        ShareRecordsWithImg shareRecordsWithImg = shareRecordsService.getShareRecord(shareRecordId);
-        return new ResponseModel(shareRecordsWithImg);
+        shareRecordsService.deleteShareRecord(shareRecordId);
+        return new ResponseModel();
     }
 }

@@ -125,4 +125,16 @@ public class ShareRecordsServiceImpl implements ShareRecordsService, ErrorCode{
         }
         return idList;
     }
+
+    @Transactional
+    public void deleteShareRecord(String shareRecordId) {
+        boolean delDirResult = fileService.deleteShareImgDir(shareRecordId);
+        if (delDirResult == false) {
+            throw new BusinessException(FILE_DELETE_FAILURE, "文件路径删除失败！");
+        }
+        int delDataResult = shareRecordsMapper.deleteByPrimaryKey(shareRecordId);
+        if (delDataResult == 0) {
+            throw new BusinessException(RECORD_NOT_FOUND, "记录删除失败！");
+        }
+    }
 }
