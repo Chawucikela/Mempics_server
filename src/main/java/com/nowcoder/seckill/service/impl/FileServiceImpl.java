@@ -18,8 +18,9 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 import java.util.Date;
 
 @Service
@@ -36,8 +37,11 @@ public class FileServiceImpl implements FileService, ErrorCode {
     @Autowired
     private ShareRecordsMapper shareRecordsMapper;
 
-    @Value("${file.directory}")
-    private String fileDirectory;
+    @Value("${file.root.directory}")
+    private String rootDirectory;
+
+    @Value("${file.shareimg.directory}")
+    private String shareDirectory;
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     private String generateFileNameSerial() {
@@ -84,13 +88,69 @@ public class FileServiceImpl implements FileService, ErrorCode {
 
         try {
             //System.out.println(file.getOriginalFilename());
-            File fileDir = new File(fileDirectory + shareRecordId + "/");
+            File fileDir = new File(rootDirectory + shareDirectory + shareRecordId + "/");
             if (!fileDir.exists()) {
                 fileDir.mkdirs();
             }
-            file.transferTo(new File(fileDirectory + shareRecordId + "/" + this.generateFileNameSerial() + "." + suffix));
+            file.transferTo(new File(rootDirectory + shareDirectory + shareRecordId + "/" + this.generateFileNameSerial() + "." + suffix));
         } catch (IOException e) {
             throw new BusinessException(FILE_UPLOAD_FAILURE, "上传失败！");
         }
+    }
+
+    public String[] getFileNameList(String shareRecordId) {
+        File fileDir = new File(rootDirectory + shareDirectory + shareRecordId + "/");
+        if (!fileDir.exists()) {
+            return null;
+        }
+        String[] fileList = fileDir.list();
+        return fileList;
+    }
+
+    public void getFile(HttpServletRequest request, HttpServletResponse response, String shareRecordId, String fileName) {
+        if (fileName != null) {
+            //设置文件路径
+            File file = new File(rootDirectory + shareDirectory + shareRecordId + "/" + fileName);
+            //File file = new File(realPath , fileName);
+            if (file.exists()) {
+                response.setContentType("image/jpeg");// 设置强制下载不打开
+                response.addHeader("Content-Disposition", "attachment;fileName=" + fileName);// 设置文件名
+                byte[] buffer = new byte[1024];
+                FileInputStream fis = null;
+                BufferedInputStream bis = null;
+                try {
+                    fis = new FileInputStream(file);
+                    bis = new BufferedInputStream(fis);
+                    OutputStream os = response.getOutputStream();
+                    int i = bis.read(buffer);
+                    while (i != -1) {
+                        os.write(buffer, 0, i);
+                        i = bis.read(buffer);
+                    }
+                    return;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    if (bis != null) {
+                        try {
+                            bis.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    if (fis != null) {
+                        try {
+                            fis.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+            else{
+                throw new BusinessException(FILE_NOT_FOUND, "找不到指定文件！");
+            }
+        }
+        throw new BusinessException(FILE_DOWNLOAD_FAILURE, "文件下载失败！");
     }
 }

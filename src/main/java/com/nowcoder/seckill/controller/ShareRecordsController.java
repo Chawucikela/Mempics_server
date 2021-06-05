@@ -4,16 +4,14 @@ import com.nowcoder.seckill.common.BusinessException;
 import com.nowcoder.seckill.common.ErrorCode;
 import com.nowcoder.seckill.common.ResponseModel;
 import com.nowcoder.seckill.dao.ShareRecordsMapper;
+import com.nowcoder.seckill.entity.ShareRecordsWithImg;
 import com.nowcoder.seckill.entity.User;
 import com.nowcoder.seckill.entity.ShareRecords;
 import com.nowcoder.seckill.service.OrderService;
 import com.nowcoder.seckill.service.ShareRecordsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -38,7 +36,7 @@ public class ShareRecordsController implements ErrorCode {
         return new ResponseModel(shareRecords);
     }
 
-    @RequestMapping(path = "/mypublish", method = RequestMethod.GET)
+    @RequestMapping(path = "/allmypublish", method = RequestMethod.GET)
     @ResponseBody
     public ResponseModel getUserShareRecords(HttpSession session) {
         User user = (User) session.getAttribute("loginUser");
@@ -46,7 +44,31 @@ public class ShareRecordsController implements ErrorCode {
             throw new BusinessException(USER_NOT_LOGIN, "请先登录！");
         }
 
-        List<ShareRecords> shareRecordsList = shareRecordsService.getShareRecordsByUser(user.getId());
-        return new ResponseModel(shareRecordsList);
+        List<String> idList = shareRecordsService.getShareRecordsByUser(user.getId());
+        return new ResponseModel(idList);
+    }
+
+    @RequestMapping(path = "/getpublish", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseModel getpublish(@RequestParam("id") String shareRecordId, HttpSession session) {
+        User user = (User) session.getAttribute("loginUser");
+        if (user == null) {
+            throw new BusinessException(USER_NOT_LOGIN, "请先登录！");
+        }
+
+        ShareRecordsWithImg shareRecordsWithImg = shareRecordsService.getShareRecord(shareRecordId);
+        return new ResponseModel(shareRecordsWithImg);
+    }
+
+    @RequestMapping(path = "/deletepublish", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseModel deletePublish(@RequestParam("id") String shareRecordId, HttpSession session) {
+        User user = (User) session.getAttribute("loginUser");
+        if (user == null) {
+            throw new BusinessException(USER_NOT_LOGIN, "请先登录！");
+        }
+
+        ShareRecordsWithImg shareRecordsWithImg = shareRecordsService.getShareRecord(shareRecordId);
+        return new ResponseModel(shareRecordsWithImg);
     }
 }
