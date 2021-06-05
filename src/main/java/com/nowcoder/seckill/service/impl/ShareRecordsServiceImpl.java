@@ -21,10 +21,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 @Service
-public class ShareRecordsImpl implements ShareRecordsService, ErrorCode{
+public class ShareRecordsServiceImpl implements ShareRecordsService, ErrorCode{
 
     @Autowired
     private UserMapper userMapper;
@@ -52,7 +53,7 @@ public class ShareRecordsImpl implements ShareRecordsService, ErrorCode{
         sb.append(Toolbox.format(new Date(), "yyyyMMdd"));
 
         // 获取流水号
-        SerialNumber serial = serialNumberMapper.selectByPrimaryKey("order_serial");
+        SerialNumber serial = serialNumberMapper.selectByPrimaryKey("share_records_serial");
         Integer value = serial.getValue();
 
         // 更新流水号
@@ -67,7 +68,7 @@ public class ShareRecordsImpl implements ShareRecordsService, ErrorCode{
     }
 
     @Transactional
-    public void publish(int userId, String title ,String description) {
+    public ShareRecords publish(int userId, String title ,String description) {
         // 校验用户
         User user = userService.findUserById(userId);
         if (user == null) {
@@ -89,5 +90,13 @@ public class ShareRecordsImpl implements ShareRecordsService, ErrorCode{
         shareRecords.setShareTime(new Timestamp(System.currentTimeMillis()));
 
         shareRecordsMapper.insert(shareRecords);
+
+        return shareRecords;
+    }
+
+    @Transactional
+    public List<ShareRecords> getShareRecordsByUser(int userId) {
+        List<ShareRecords> shareRecordsList = shareRecordsMapper.selectByUserId(userId);
+        return shareRecordsList;
     }
 }
