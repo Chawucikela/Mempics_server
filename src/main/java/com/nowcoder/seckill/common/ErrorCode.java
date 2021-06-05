@@ -20,5 +20,6 @@ public interface ErrorCode {
     int FILE_TYPE_ERROR = 303;
     int FILE_DOWNLOAD_FAILURE = 304;
     int FILE_NOT_FOUND = 305;
+    int FILE_DELETE_FAILURE = 306;
 
 }

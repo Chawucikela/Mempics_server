@@ -65,6 +65,24 @@ public class FileServiceImpl implements FileService, ErrorCode {
         return sb.toString();
     }
 
+    private boolean deleteFile(File dirFile) {
+        // 如果dir对应的文件不存在，则退出
+        if (!dirFile.exists()) {
+            return true;
+        }
+
+        if (dirFile.isFile()) {
+            return dirFile.delete();
+        } else {
+
+            for (File file : dirFile.listFiles()) {
+                deleteFile(file);
+            }
+        }
+
+        return dirFile.delete();
+    }
+
     public void save(MultipartFile file, String shareRecordId, int userId) {
         if (file.isEmpty()) {
             throw new BusinessException(FILE_UPLOAD_FAILURE, "空文件！");
@@ -153,4 +171,12 @@ public class FileServiceImpl implements FileService, ErrorCode {
         }
         throw new BusinessException(FILE_DOWNLOAD_FAILURE, "文件下载失败！");
     }
+
+    public boolean deleteShareImgDir(String shareRecordId) {
+        File fileDir = new File(rootDirectory + shareDirectory + shareRecordId + "/");
+        boolean result = this.deleteFile(fileDir);
+        return result;
+    }
+
+
 }
