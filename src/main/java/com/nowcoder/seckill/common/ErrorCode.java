@@ -12,10 +12,13 @@ public interface ErrorCode {
 
     // 业务异常
     int STOCK_NOT_ENOUGH = 201;
+    int RECORD_NOT_FOUND = 404;
 
     //
     int FILE_UPLOAD_FAILURE = 301;
     int FILE_SIZE_LIMIT = 302;
     int FILE_TYPE_ERROR = 303;
+    int FILE_DOWNLOAD_FAILURE = 304;
+    int FILE_NOT_FOUND = 305;
 
 }

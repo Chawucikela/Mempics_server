@@ -9,7 +9,9 @@ import com.nowcoder.seckill.dao.ShareRecordsMapper;
 import com.nowcoder.seckill.dao.UserMapper;
 import com.nowcoder.seckill.entity.SerialNumber;
 import com.nowcoder.seckill.entity.ShareRecords;
+import com.nowcoder.seckill.entity.ShareRecordsWithImg;
 import com.nowcoder.seckill.entity.User;
+import com.nowcoder.seckill.service.FileService;
 import com.nowcoder.seckill.service.ShareRecordsService;
 import com.nowcoder.seckill.service.UserService;
 import org.apache.commons.lang3.StringUtils;
@@ -20,9 +22,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class ShareRecordsServiceImpl implements ShareRecordsService, ErrorCode{
@@ -38,6 +38,9 @@ public class ShareRecordsServiceImpl implements ShareRecordsService, ErrorCode{
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private FileService fileService;
 
     /**
      * 格式：日期 + 流水
@@ -95,8 +98,31 @@ public class ShareRecordsServiceImpl implements ShareRecordsService, ErrorCode{
     }
 
     @Transactional
-    public List<ShareRecords> getShareRecordsByUser(int userId) {
+    public ShareRecordsWithImg getShareRecord(String shareRecordId) {
+        ShareRecords shareRecord = shareRecordsMapper.selectByPrimaryKey(shareRecordId);
+        if (shareRecord == null) {
+            throw new BusinessException(RECORD_NOT_FOUND, "找不到指定条目！");
+        }
+        ShareRecordsWithImg shareRecordsWithImg = new ShareRecordsWithImg();
+        shareRecordsWithImg.setShareRecords(shareRecord);
+
+        String[] fileList = fileService.getFileNameList(shareRecordId);
+        if (fileList == null) {
+            shareRecordsWithImg.setFileNameList(null);
+        }
+        else {
+            shareRecordsWithImg.setFileNameList(Arrays.asList(fileList.clone()));
+        }
+        return shareRecordsWithImg;
+    }
+
+    @Transactional
+    public List<String> getShareRecordsByUser(int userId) {
         List<ShareRecords> shareRecordsList = shareRecordsMapper.selectByUserId(userId);
-        return shareRecordsList;
+        List<String> idList = new ArrayList<String>();
+        for (ShareRecords shareRecords : shareRecordsList) {
+            idList.add(shareRecords.getId());
+        }
+        return idList;
     }
 }
