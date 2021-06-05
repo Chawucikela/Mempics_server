@@ -16,6 +16,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.Random;
 import java.io.*;
@@ -23,7 +25,7 @@ import java.io.*;
 @Controller
 @RequestMapping("/file")
 @CrossOrigin(origins = "${nowcoder.web.path}", allowedHeaders = "*", allowCredentials = "true")
-public class UploadController implements ErrorCode {
+public class FileTransferController implements ErrorCode {
     @Autowired
     private FileService fileService;
 
@@ -52,5 +54,19 @@ public class UploadController implements ErrorCode {
         }
         fileService.save(file, shareRecordId, user.getId());
         return new ResponseModel();
+    }
+
+    @RequestMapping(path = "/download", method = RequestMethod.GET)
+    @ResponseBody
+    public void getFile(HttpServletRequest request, HttpServletResponse response,
+                        HttpSession session,
+                        @RequestParam("recordid") String shareRecordId,
+                        @RequestParam("filename") String fileName) {
+        User user = (User) session.getAttribute("loginUser");
+        if (user == null) {
+            throw new BusinessException(USER_NOT_LOGIN, "请先登录！");
+        }
+        fileService.getFile(request, response, shareRecordId, fileName);
+        return;
     }
 }

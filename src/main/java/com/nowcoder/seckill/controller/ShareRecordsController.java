@@ -59,4 +59,16 @@ public class ShareRecordsController implements ErrorCode {
         ShareRecordsWithImg shareRecordsWithImg = shareRecordsService.getShareRecord(shareRecordId);
         return new ResponseModel(shareRecordsWithImg);
     }
+
+    @RequestMapping(path = "/deletepublish", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseModel deletePublish(@RequestParam("id") String shareRecordId, HttpSession session) {
+        User user = (User) session.getAttribute("loginUser");
+        if (user == null) {
+            throw new BusinessException(USER_NOT_LOGIN, "请先登录！");
+        }
+
+        ShareRecordsWithImg shareRecordsWithImg = shareRecordsService.getShareRecord(shareRecordId);
+        return new ResponseModel(shareRecordsWithImg);
+    }
 }

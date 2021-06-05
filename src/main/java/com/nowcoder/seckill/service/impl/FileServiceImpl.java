@@ -37,8 +37,11 @@ public class FileServiceImpl implements FileService, ErrorCode {
     @Autowired
     private ShareRecordsMapper shareRecordsMapper;
 
-    @Value("${file.directory}")
-    private String fileDirectory;
+    @Value("${file.root.directory}")
+    private String rootDirectory;
+
+    @Value("${file.shareimg.directory}")
+    private String shareDirectory;
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     private String generateFileNameSerial() {
@@ -85,18 +88,18 @@ public class FileServiceImpl implements FileService, ErrorCode {
 
         try {
             //System.out.println(file.getOriginalFilename());
-            File fileDir = new File(fileDirectory + shareRecordId + "/");
+            File fileDir = new File(rootDirectory + shareDirectory + shareRecordId + "/");
             if (!fileDir.exists()) {
                 fileDir.mkdirs();
             }
-            file.transferTo(new File(fileDirectory + shareRecordId + "/" + this.generateFileNameSerial() + "." + suffix));
+            file.transferTo(new File(rootDirectory + shareDirectory + shareRecordId + "/" + this.generateFileNameSerial() + "." + suffix));
         } catch (IOException e) {
             throw new BusinessException(FILE_UPLOAD_FAILURE, "上传失败！");
         }
     }
 
     public String[] getFileNameList(String shareRecordId) {
-        File fileDir = new File(fileDirectory + shareRecordId + "/");
+        File fileDir = new File(rootDirectory + shareDirectory + shareRecordId + "/");
         if (!fileDir.exists()) {
             return null;
         }
@@ -107,7 +110,7 @@ public class FileServiceImpl implements FileService, ErrorCode {
     public void getFile(HttpServletRequest request, HttpServletResponse response, String shareRecordId, String fileName) {
         if (fileName != null) {
             //设置文件路径
-            File file = new File(fileDirectory + shareRecordId + "/" + fileName);
+            File file = new File(rootDirectory + shareDirectory + shareRecordId + "/" + fileName);
             //File file = new File(realPath , fileName);
             if (file.exists()) {
                 response.setContentType("image/jpeg");// 设置强制下载不打开
