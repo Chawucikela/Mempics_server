@@ -46,4 +46,6 @@ public interface ShareRecordsMapper {
      * @mbg.generated Fri Jun 04 12:46:02 CST 2021
      */
     int updateByPrimaryKey(ShareRecords record);
+
+    List<ShareRecords> selectByUserId(int userId);
 }

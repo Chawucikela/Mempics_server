@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,6 +27,9 @@ public class UploadController implements ErrorCode {
     @Autowired
     private FileService fileService;
 
+    @Value("${file.size-limit}")
+    private Float fileSizeLimit;
+
     @RequestMapping(value="/uploadPage")
     public String uploadPage(){
         return "uploadPage";
@@ -33,8 +37,20 @@ public class UploadController implements ErrorCode {
 
     @RequestMapping(value="/upload", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseModel upload(@RequestParam("file") MultipartFile file) {
-        fileService.save(file);
+    public ResponseModel upload(@RequestParam("file") MultipartFile file, String shareRecordId, HttpSession session) {
+        if (shareRecordId == null || shareRecordId.isEmpty()) {
+            throw new BusinessException(PARAMETER_ERROR, "参数异常！");
+        }
+        Float fileSize = Float.parseFloat(String.valueOf(file.getSize())) / 1024;
+
+        if (fileSize > fileSizeLimit) {
+            throw new BusinessException(FILE_SIZE_LIMIT, "文件体积超出限制！");
+        }
+        User user = (User) session.getAttribute("loginUser");
+        if (user == null) {
+            throw new BusinessException(USER_NOT_LOGIN, "请先登录！");
+        }
+        fileService.save(file, shareRecordId, user.getId());
         return new ResponseModel();
     }
 }

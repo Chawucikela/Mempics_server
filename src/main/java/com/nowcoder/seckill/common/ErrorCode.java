@@ -15,5 +15,7 @@ public interface ErrorCode {
 
     //
     int FILE_UPLOAD_FAILURE = 301;
+    int FILE_SIZE_LIMIT = 302;
+    int FILE_TYPE_ERROR = 303;
 
 }
