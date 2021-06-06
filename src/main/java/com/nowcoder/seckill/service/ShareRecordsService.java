@@ -14,4 +14,6 @@ public interface ShareRecordsService {
     List<String> getShareRecordsByUser(int userId);
 
     void deleteShareRecord(String shareRecordId);
+
+    void rollbackShareRecord(String shareRecordId);
 }
