@@ -28,7 +28,7 @@ Parameter: [title, description]
 
 ### 获得我的发布
 
-Path: /share/publish
+Path: /share/allmypublish
 
 Method: GET
 
@@ -104,7 +104,7 @@ Parameter: [id]
 
 # 更新
 
-## **接口**
+## 接口（加粗为更新内容）
 
 ### 发布时上传图片
 
