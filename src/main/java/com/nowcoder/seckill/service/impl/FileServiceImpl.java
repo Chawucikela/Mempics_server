@@ -127,6 +127,10 @@ public class FileServiceImpl implements FileService, ErrorCode {
 
     public void getFile(HttpServletRequest request, HttpServletResponse response, String shareRecordId, String fileName) {
         if (fileName != null) {
+            ShareRecords shareRecord = shareRecordsMapper.selectByPrimaryKey(shareRecordId);
+            if (shareRecord == null) {
+                throw new BusinessException(PARAMETER_ERROR, "找不到此发布记录！");
+            }
             //设置文件路径
             File file = new File(rootDirectory + shareDirectory + shareRecordId + "/" + fileName);
             //File file = new File(realPath , fileName);

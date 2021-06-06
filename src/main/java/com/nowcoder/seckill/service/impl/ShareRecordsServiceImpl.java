@@ -20,6 +20,7 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import sun.security.util.Debug;
 
 import java.sql.Timestamp;
 import java.util.*;
@@ -136,5 +137,12 @@ public class ShareRecordsServiceImpl implements ShareRecordsService, ErrorCode{
         if (delDataResult == 0) {
             throw new BusinessException(RECORD_NOT_FOUND, "记录删除失败！");
         }
+    }
+
+    @Transactional
+    public void rollbackShareRecord(String shareRecordId) {
+        boolean delDirResult = fileService.deleteShareImgDir(shareRecordId);
+        int delDataResult = shareRecordsMapper.deleteByPrimaryKey(shareRecordId);
+        System.out.println("id:" + shareRecordId + " 发布记录已回滚");
     }
 }

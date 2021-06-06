@@ -6,6 +6,7 @@ import com.nowcoder.seckill.common.ResponseModel;
 import com.nowcoder.seckill.common.Toolbox;
 import com.nowcoder.seckill.entity.User;
 import com.nowcoder.seckill.service.FileService;
+import com.nowcoder.seckill.service.ShareRecordsService;
 import com.nowcoder.seckill.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -23,11 +24,14 @@ import java.util.Random;
 import java.io.*;
 
 @Controller
-@RequestMapping("/file")
+@RequestMapping("/filetransfer")
 @CrossOrigin(origins = "${nowcoder.web.path}", allowedHeaders = "*", allowCredentials = "true")
 public class FileTransferController implements ErrorCode {
     @Autowired
     private FileService fileService;
+
+    @Autowired
+    private ShareRecordsService shareRecordsService;
 
     @Value("${file.size-limit}")
     private Float fileSizeLimit;
@@ -37,9 +41,37 @@ public class FileTransferController implements ErrorCode {
         return "uploadPage";
     }
 
-    @RequestMapping(value="/upload", method = RequestMethod.POST)
+    @RequestMapping(value="/newShareImg", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseModel upload(@RequestParam("file") MultipartFile file, String shareRecordId, HttpSession session) {
+    public ResponseModel newImgToShareRecord(@RequestParam("file") MultipartFile file, String shareRecordId, HttpSession session) {
+        if (shareRecordId == null || shareRecordId.isEmpty()) {
+            shareRecordsService.deleteShareRecord(shareRecordId);
+            throw new BusinessException(PARAMETER_ERROR, "参数异常！");
+        }
+        Float fileSize = Float.parseFloat(String.valueOf(file.getSize())) / 1024;
+
+        if (fileSize > fileSizeLimit) {
+            shareRecordsService.rollbackShareRecord(shareRecordId);
+            throw new BusinessException(FILE_SIZE_LIMIT, "文件体积超出限制！");
+        }
+        User user = (User) session.getAttribute("loginUser");
+        if (user == null) {
+            shareRecordsService.rollbackShareRecord(shareRecordId);
+            throw new BusinessException(USER_NOT_LOGIN, "请先登录！");
+        }
+        try {
+            fileService.save(file, shareRecordId, user.getId());
+        } catch (Exception e) {
+            shareRecordsService.rollbackShareRecord(shareRecordId);
+            throw e;
+        }
+
+        return new ResponseModel();
+    }
+
+    @RequestMapping(value="/addShareImg", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseModel addImgToShareRecord(@RequestParam("file") MultipartFile file, String shareRecordId, HttpSession session) {
         if (shareRecordId == null || shareRecordId.isEmpty()) {
             throw new BusinessException(PARAMETER_ERROR, "参数异常！");
         }
@@ -52,7 +84,12 @@ public class FileTransferController implements ErrorCode {
         if (user == null) {
             throw new BusinessException(USER_NOT_LOGIN, "请先登录！");
         }
-        fileService.save(file, shareRecordId, user.getId());
+        try {
+            fileService.save(file, shareRecordId, user.getId());
+        } catch (Exception e) {
+            throw e;
+        }
+
         return new ResponseModel();
     }
 
