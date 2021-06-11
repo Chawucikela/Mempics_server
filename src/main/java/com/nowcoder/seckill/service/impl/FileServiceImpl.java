@@ -87,7 +87,7 @@ public class FileServiceImpl implements FileService, ErrorCode {
         if (file.isEmpty()) {
             throw new BusinessException(FILE_UPLOAD_FAILURE, "空文件！");
         }
-        String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().indexOf(".") + 1,
+        String suffix = file.getOriginalFilename().substring(file.getOriginalFilename()./*indexOf*/lastIndexOf(".") + 1,
                 file.getOriginalFilename().length());
         if (!suffix.toUpperCase().equals("JPG") & !suffix.toUpperCase().equals("JPEG") & !suffix.toUpperCase().equals("PNG")) {
             throw new BusinessException(FILE_TYPE_ERROR, "不支持的文件类型！");
