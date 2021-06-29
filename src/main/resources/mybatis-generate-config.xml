@@ -50,6 +50,16 @@
                enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" >
             <columnOverride column="share_time" jdbcType="TIMESTAMP" javaType="java.sql.Timestamp" />
         </table>
+        <table tableName="relationship" domainObjectName="Relationship"
+               enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" >
+            <generatedKey column="ID" sqlStatement="MYSQL" identity="true" />
+            <columnOverride column="following_time" jdbcType="TIMESTAMP" javaType="java.sql.Timestamp" />
+        </table>
+        <table tableName="share_records_img_relation" domainObjectName="SRIRelation"
+               enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" >
+            <generatedKey column="ID" sqlStatement="MYSQL" identity="true" />
+            <columnOverride column="following_time" jdbcType="TIMESTAMP" javaType="java.sql.Timestamp" />
+        </table>
 
     </context>
 </generatorConfiguration>

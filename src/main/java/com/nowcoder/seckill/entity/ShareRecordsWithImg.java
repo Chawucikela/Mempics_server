@@ -6,7 +6,7 @@ public class ShareRecordsWithImg {
 
     private ShareRecords shareRecords;
 
-    private List<String> fileNameList;
+    private List<SRIRelation> fileNameList;
 
     public ShareRecords getShareRecords() {
         return shareRecords;
@@ -16,11 +16,11 @@ public class ShareRecordsWithImg {
         this.shareRecords = shareRecords;
     }
 
-    public List<String> getFileNameList() {
+    public List<SRIRelation> getFileNameList() {
         return fileNameList;
     }
 
-    public void setFileNameList(List<String> fileNameList) {
+    public void setFileNameList(List<SRIRelation> fileNameList) {
         this.fileNameList = fileNameList;
     }
 }

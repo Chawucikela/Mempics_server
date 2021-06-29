@@ -9,6 +9,7 @@ public interface ErrorCode {
     // 用户异常
     int USER_NOT_LOGIN = 101;
     int USER_LOGIN_FAILURE = 102;
+    int USER_NOT_FOUND = 103;
 
     // 业务异常
     int STOCK_NOT_ENOUGH = 201;

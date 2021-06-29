@@ -80,7 +80,7 @@ public class UserController implements ErrorCode {
         User user = userService.login(phone, md5pwd);
         session.setAttribute("loginUser", user);
 
-        return new ResponseModel();
+        return new ResponseModel(user);
     }
 
     @RequestMapping(path = "/logout", method = RequestMethod.GET)
@@ -95,5 +95,16 @@ public class UserController implements ErrorCode {
     public ResponseModel getUser(HttpSession session) {
         User user = (User) session.getAttribute("loginUser");
         return new ResponseModel(user);
+    }
+
+    @RequestMapping(path = "/follow", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseModel follow(@RequestParam("id") int followingUserId, HttpSession session) {
+        User user = (User) session.getAttribute("loginUser");
+        if (user == null) {
+            throw new BusinessException(USER_NOT_LOGIN, "请先登录！");
+        }
+        userService.addRelationship(user.getId(), followingUserId);
+        return new ResponseModel();
     }
 }

@@ -4,13 +4,11 @@ import com.nowcoder.seckill.common.BusinessException;
 import com.nowcoder.seckill.common.ErrorCode;
 import com.nowcoder.seckill.common.Toolbox;
 import com.nowcoder.seckill.component.ObjectValidator;
+import com.nowcoder.seckill.dao.SRIRelationMapper;
 import com.nowcoder.seckill.dao.SerialNumberMapper;
 import com.nowcoder.seckill.dao.ShareRecordsMapper;
 import com.nowcoder.seckill.dao.UserMapper;
-import com.nowcoder.seckill.entity.SerialNumber;
-import com.nowcoder.seckill.entity.ShareRecords;
-import com.nowcoder.seckill.entity.ShareRecordsWithImg;
-import com.nowcoder.seckill.entity.User;
+import com.nowcoder.seckill.entity.*;
 import com.nowcoder.seckill.service.FileService;
 import com.nowcoder.seckill.service.ShareRecordsService;
 import com.nowcoder.seckill.service.UserService;
@@ -36,6 +34,9 @@ public class ShareRecordsServiceImpl implements ShareRecordsService, ErrorCode{
 
     @Autowired
     private SerialNumberMapper serialNumberMapper;
+
+    @Autowired
+    private SRIRelationMapper sriRelationMapper;
 
     @Autowired
     private UserService userService;
@@ -106,25 +107,31 @@ public class ShareRecordsServiceImpl implements ShareRecordsService, ErrorCode{
         }
         ShareRecordsWithImg shareRecordsWithImg = new ShareRecordsWithImg();
         shareRecordsWithImg.setShareRecords(shareRecord);
+        List<SRIRelation> fileRelation = sriRelationMapper.selectByShareRecordId(shareRecord.getId());
+        shareRecordsWithImg.setFileNameList(fileRelation);
 
-        String[] fileList = fileService.getFileNameList(shareRecordId);
-        if (fileList == null) {
-            shareRecordsWithImg.setFileNameList(null);
-        }
-        else {
-            shareRecordsWithImg.setFileNameList(Arrays.asList(fileList.clone()));
-        }
+//        String[] fileList = fileService.getFileNameList(shareRecordId);
+//        if (fileList == null) {
+//            shareRecordsWithImg.setFileNameList(null);
+//        }
+//        else {
+//            shareRecordsWithImg.setFileNameList(Arrays.asList(fileList.clone()));
+//        }
         return shareRecordsWithImg;
     }
 
     @Transactional
-    public List<String> getShareRecordsByUser(int userId) {
+    public List<ShareRecordsWithImg> getShareRecordsByUser(int userId) {
+        List<ShareRecordsWithImg> resultSet= new ArrayList<ShareRecordsWithImg>();
         List<ShareRecords> shareRecordsList = shareRecordsMapper.selectByUserId(userId);
-        List<String> idList = new ArrayList<String>();
         for (ShareRecords shareRecords : shareRecordsList) {
-            idList.add(shareRecords.getId());
+            ShareRecordsWithImg shareRecordsWithImg = new ShareRecordsWithImg();
+            shareRecordsWithImg.setShareRecords(shareRecords);
+            List<SRIRelation> fileRelation = sriRelationMapper.selectByShareRecordId(shareRecords.getId());
+            shareRecordsWithImg.setFileNameList(fileRelation);
+            resultSet.add(shareRecordsWithImg);
         }
-        return idList;
+        return resultSet;
     }
 
     @Transactional
@@ -132,6 +139,10 @@ public class ShareRecordsServiceImpl implements ShareRecordsService, ErrorCode{
         boolean delDirResult = fileService.deleteShareImgDir(shareRecordId);
         if (delDirResult == false) {
             throw new BusinessException(FILE_DELETE_FAILURE, "文件路径删除失败！");
+        }
+        int delRelationResult = sriRelationMapper.deleteByShareRecordId(shareRecordId);
+        if (delRelationResult == 0) {
+            throw new BusinessException(RECORD_NOT_FOUND, "文件关系记录删除失败！");
         }
         int delDataResult = shareRecordsMapper.deleteByPrimaryKey(shareRecordId);
         if (delDataResult == 0) {
@@ -142,6 +153,7 @@ public class ShareRecordsServiceImpl implements ShareRecordsService, ErrorCode{
     @Transactional
     public void rollbackShareRecord(String shareRecordId) {
         boolean delDirResult = fileService.deleteShareImgDir(shareRecordId);
+        int delRelationResult = sriRelationMapper.deleteByShareRecordId(shareRecordId);
         int delDataResult = shareRecordsMapper.deleteByPrimaryKey(shareRecordId);
         System.out.println("id:" + shareRecordId + " 发布记录已回滚");
     }

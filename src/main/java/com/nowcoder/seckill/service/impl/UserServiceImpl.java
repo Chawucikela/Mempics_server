@@ -3,7 +3,9 @@ package com.nowcoder.seckill.service.impl;
 import com.nowcoder.seckill.common.BusinessException;
 import com.nowcoder.seckill.common.ErrorCode;
 import com.nowcoder.seckill.component.ObjectValidator;
+import com.nowcoder.seckill.dao.RelationshipMapper;
 import com.nowcoder.seckill.dao.UserMapper;
+import com.nowcoder.seckill.entity.Relationship;
 import com.nowcoder.seckill.entity.User;
 import com.nowcoder.seckill.service.UserService;
 import org.apache.commons.lang3.StringUtils;
@@ -12,6 +14,8 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -19,6 +23,9 @@ public class UserServiceImpl implements UserService, ErrorCode {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private RelationshipMapper relationshipMapper;
 
     @Autowired
     private ObjectValidator validator;
@@ -58,6 +65,39 @@ public class UserServiceImpl implements UserService, ErrorCode {
 
     public User findUserById(int id) {
         return userMapper.selectByPrimaryKey(id);
+    }
+
+    @Transactional
+    public void addRelationship(int userId, int followingUserId) {
+        if (userId == followingUserId) {
+            throw new BusinessException(UNDEFINED_ERROR, "不能关注自己！");
+        }
+        User user = userMapper.selectByPrimaryKey(followingUserId);
+        if (user == null) {
+            throw new BusinessException(USER_NOT_FOUND, "找不到用户！");
+        }
+        Relationship existRelationship = relationshipMapper.selectByUserIds(userId, followingUserId);
+        if (existRelationship != null) {
+            throw new BusinessException(UNDEFINED_ERROR, "已关注！");
+        }
+        Relationship relationship = new Relationship();
+        relationship.setUserId(userId);
+        relationship.setFollowingUserId(followingUserId);
+        relationship.setFollowingTime(new Timestamp(System.currentTimeMillis()));
+        relationshipMapper.insert(relationship);
+    }
+
+    @Transactional
+    public void deleteRelationship(int userId, int followingUserId) {
+
+    }
+
+    public List<Relationship> getFollowingUserList(int usreId) {
+        return null;
+    }
+
+    public List<Relationship> getFollowerUserList(int followingUserId) {
+        return null;
     }
 
 }

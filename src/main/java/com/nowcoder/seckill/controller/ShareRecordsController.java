@@ -44,8 +44,8 @@ public class ShareRecordsController implements ErrorCode {
             throw new BusinessException(USER_NOT_LOGIN, "请先登录！");
         }
 
-        List<String> idList = shareRecordsService.getShareRecordsByUser(user.getId());
-        return new ResponseModel(idList);
+        List<ShareRecordsWithImg> resultSet = shareRecordsService.getShareRecordsByUser(user.getId());
+        return new ResponseModel(resultSet);
     }
 
     @RequestMapping(path = "/getpublish", method = RequestMethod.GET)
