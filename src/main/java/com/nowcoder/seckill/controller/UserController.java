@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 import java.util.Random;
 
 @Controller
@@ -106,5 +107,41 @@ public class UserController implements ErrorCode {
         }
         userService.addRelationship(user.getId(), followingUserId);
         return new ResponseModel();
+    }
+
+    @RequestMapping(path = "/unfollow", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseModel unfollow(@RequestParam("id") int followingUserId, HttpSession session) {
+        User user = (User) session.getAttribute("loginUser");
+        if (user == null) {
+            throw new BusinessException(USER_NOT_LOGIN, "请先登录！");
+        }
+        userService.deleteRelationship(user.getId(), followingUserId);
+        return new ResponseModel();
+    }
+
+    @RequestMapping(path = "/getfollowing", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseModel getFollowingUsers(HttpSession session) {
+        User user = (User) session.getAttribute("loginUser");
+        if (user == null) {
+            throw new BusinessException(USER_NOT_LOGIN, "请先登录！");
+        }
+        List<User> resultSet =  userService.getFollowingUserList(user.getId());
+        return new ResponseModel(resultSet);
+    }
+
+    @RequestMapping(path = "/searchuser", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseModel searchUser(@RequestParam("keyword") String keyword, HttpSession session) {
+        List<User> resultSet = userService.searchByNickname(keyword);
+        return new ResponseModel(resultSet);
+    }
+
+    @RequestMapping(path = "/getuserinfo", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseModel searchUser(@RequestParam("id") int id, HttpSession session) {
+        User user = userService.findUserdetailById(id);
+        return new ResponseModel(user);
     }
 }

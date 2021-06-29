@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -67,6 +68,10 @@ public class UserServiceImpl implements UserService, ErrorCode {
         return userMapper.selectByPrimaryKey(id);
     }
 
+    public User findUserdetailById(int id) {
+        return userMapper.selectUserDetailByPrimaryKey(id);
+    }
+
     @Transactional
     public void addRelationship(int userId, int followingUserId) {
         if (userId == followingUserId) {
@@ -89,15 +94,33 @@ public class UserServiceImpl implements UserService, ErrorCode {
 
     @Transactional
     public void deleteRelationship(int userId, int followingUserId) {
-
+        int result = relationshipMapper.deleteByUserIds(userId, followingUserId);
+        if (result == 0) {
+            throw new BusinessException(UNDEFINED_ERROR, "未找到关系！");
+        }
     }
 
-    public List<Relationship> getFollowingUserList(int usreId) {
+    public List<User> getFollowingUserList(int usreId) {
+        List<User> resultSet= new ArrayList<User>();
+        List<Relationship> relationships = relationshipMapper.selectFollowingUser(usreId);
+        for (Relationship relationship : relationships) {
+            User user = userMapper.selectByPrimaryKeySimplified(relationship.getFollowingUserId());
+            resultSet.add(user);
+        }
+        return resultSet;
+    }
+
+    public List<User> getFollowerUserList(int followingUserId) {
         return null;
     }
 
-    public List<Relationship> getFollowerUserList(int followingUserId) {
+    public List<User> searchByPhone(String phone) {
         return null;
+    }
+
+    public List<User> searchByNickname(String nickname) {
+        List<User> resultSet = userMapper.selectByNicknameSimplified(nickname);
+        return resultSet;
     }
 
 }

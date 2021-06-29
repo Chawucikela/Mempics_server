@@ -54,4 +54,12 @@ public interface UserMapper {
      * @return
      */
     User selectByPhone(String phone);
+
+    User selectByPrimaryKeySimplified(Integer id);
+
+    User selectByPhoneSimplified(String phone);
+
+    List<User> selectByNicknameSimplified(String nickname);
+
+    User selectUserDetailByPrimaryKey(Integer id);
 }

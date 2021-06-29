@@ -12,12 +12,17 @@ public interface UserService {
     User login(String phone, String password);
 
     User findUserById(int id);
+    User findUserdetailById(int id);
 
     void addRelationship(int userId, int followingUserId);
 
     void deleteRelationship(int userId, int followingUserId);
 
-    List<Relationship> getFollowingUserList(int usreId);
+    List<User> getFollowingUserList(int usreId);
 
-    List<Relationship> getFollowerUserList(int followingUserId);
+    List<User> getFollowerUserList(int followingUserId);
+
+    List<User> searchByPhone(String phone);
+
+    List<User> searchByNickname(String nickname);
 }
