@@ -4,8 +4,10 @@ import com.nowcoder.seckill.common.BusinessException;
 import com.nowcoder.seckill.common.ErrorCode;
 import com.nowcoder.seckill.common.Toolbox;
 import com.nowcoder.seckill.component.ObjectValidator;
+import com.nowcoder.seckill.dao.SRIRelationMapper;
 import com.nowcoder.seckill.dao.SerialNumberMapper;
 import com.nowcoder.seckill.dao.ShareRecordsMapper;
+import com.nowcoder.seckill.entity.SRIRelation;
 import com.nowcoder.seckill.entity.SerialNumber;
 import com.nowcoder.seckill.entity.ShareRecords;
 import com.nowcoder.seckill.entity.User;
@@ -36,6 +38,9 @@ public class FileServiceImpl implements FileService, ErrorCode {
 
     @Autowired
     private ShareRecordsMapper shareRecordsMapper;
+
+    @Autowired
+    private SRIRelationMapper sriRelationMapper;
 
     @Value("${file.root.directory}")
     private String rootDirectory;
@@ -96,23 +101,31 @@ public class FileServiceImpl implements FileService, ErrorCode {
         if (user == null) {
             throw new BusinessException(PARAMETER_ERROR, "指定的用户不存在！");
         }
-        ShareRecords shareRecord = shareRecordsMapper.selectByPrimaryKey(shareRecordId);
+        ShareRecords shareRecord = shareRecordsMapper. selectByPrimaryKey(shareRecordId);
         if (shareRecord == null) {
             throw new BusinessException(PARAMETER_ERROR, "找不到此发布记录！");
         }
         if (shareRecord.getUserId() != userId) {
             throw new BusinessException(PARAMETER_ERROR, "该发布记录不属于此用户！");
         }
-
+        String fileName = this.generateFileNameSerial() + "." + suffix;
         try {
             //System.out.println(file.getOriginalFilename());
             File fileDir = new File(rootDirectory + shareDirectory + shareRecordId + "/");
             if (!fileDir.exists()) {
                 fileDir.mkdirs();
             }
-            file.transferTo(new File(rootDirectory + shareDirectory + shareRecordId + "/" + this.generateFileNameSerial() + "." + suffix));
+            file.transferTo(new File(rootDirectory + shareDirectory + shareRecordId + "/" + fileName));
+
         } catch (IOException e) {
-            throw new BusinessException(FILE_UPLOAD_FAILURE, "上传失败！");
+            throw new BusinessException(FILE_UPLOAD_FAILURE, "存储失败！");
+        }
+        SRIRelation sriRelation = new SRIRelation();
+        sriRelation.setShareRecordId(shareRecordId);
+        sriRelation.setFileName(fileName);
+        int result = sriRelationMapper.insert(sriRelation);
+        if (result == 0) {
+            throw new BusinessException(PARAMETER_ERROR, "数据库错误！");
         }
     }
 

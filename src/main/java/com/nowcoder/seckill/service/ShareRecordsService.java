@@ -11,7 +11,7 @@ public interface ShareRecordsService {
 
     ShareRecordsWithImg getShareRecord(String shareRecordId);
 
-    List<String> getShareRecordsByUser(int userId);
+    List<ShareRecordsWithImg> getShareRecordsByUser(int userId);
 
     void deleteShareRecord(String shareRecordId);
 
