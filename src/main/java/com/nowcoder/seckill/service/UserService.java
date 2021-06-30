@@ -12,6 +12,7 @@ public interface UserService {
     User login(String phone, String password);
 
     User findUserById(int id);
+
     User findUserdetailById(int id);
 
     void addRelationship(int userId, int followingUserId);
