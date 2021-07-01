@@ -235,22 +235,14 @@ Parameter: [id]
 ## 数据库
 
 ```sql
-DROP TABLE IF EXISTS share_records_img_relation;`
-
-`/*!40101 SET @saved_cs_client   = @@character_set_client */;`
-
-`/*!50503 SET character_set_client = utf8mb4 */;`
-
-`CREATE TABLE share_records_img_relation (`
-
- `id int NOT NULL AUTO_INCREMENT,`
-
- `share_record_id varchar(50) NOT NULL,`
-
- `file_name varchar(100) NOT NULL DEFAULT '',`
-
- `PRIMARY KEY (id)`
-
-`) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+DROP TABLE IF EXISTS `share_records_img_relation`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `share_records_img_relation` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `share_record_id` varchar(50) NOT NULL,
+  `file_name` varchar(100) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ```
 

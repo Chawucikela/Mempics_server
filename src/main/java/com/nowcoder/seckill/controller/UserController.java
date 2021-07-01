@@ -140,7 +140,7 @@ public class UserController implements ErrorCode {
 
     @RequestMapping(path = "/getuserinfo", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseModel searchUser(@RequestParam("id") int id, HttpSession session) {
+    public ResponseModel gethUser(@RequestParam("id") int id, HttpSession session) {
         User user = userService.findUserdetailById(id);
         return new ResponseModel(user);
     }
