@@ -66,6 +66,10 @@
     from share_records
   </select>
 
+
+  <!-- ============================================================================ -->
+
+
   <select id="selectByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--
       WARNING - @mbg.generated

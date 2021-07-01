@@ -67,6 +67,8 @@
     from relationship
   </select>
 
+  <!-- ============================================================================ -->
+
   <select id="selectByUserIds" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--
       WARNING - @mbg.generated

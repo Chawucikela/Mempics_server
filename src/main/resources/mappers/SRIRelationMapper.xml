@@ -63,6 +63,8 @@
     from share_records_img_relation
   </select>
 
+  <!-- ============================================================================ -->
+
   <select id="selectByShareRecordId" parameterType="java.lang.String" resultMap="BaseResultMap">
     <!--
       WARNING - @mbg.generated
