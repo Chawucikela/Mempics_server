@@ -131,6 +131,17 @@ public class UserController implements ErrorCode {
         return new ResponseModel(resultSet);
     }
 
+    @RequestMapping(path = "/getfollower", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseModel getFollowerUsers(HttpSession session) {
+        User user = (User) session.getAttribute("loginUser");
+        if (user == null) {
+            throw new BusinessException(USER_NOT_LOGIN, "请先登录！");
+        }
+        List<User> resultSet =  userService.getFollowerUserList(user.getId());
+        return new ResponseModel(resultSet);
+    }
+
     @RequestMapping(path = "/searchuser", method = RequestMethod.GET)
     @ResponseBody
     public ResponseModel searchUser(@RequestParam("keyword") String keyword, HttpSession session) {

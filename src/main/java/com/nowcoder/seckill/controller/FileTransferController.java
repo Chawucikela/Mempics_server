@@ -3,14 +3,9 @@ package com.nowcoder.seckill.controller;
 import com.nowcoder.seckill.common.BusinessException;
 import com.nowcoder.seckill.common.ErrorCode;
 import com.nowcoder.seckill.common.ResponseModel;
-import com.nowcoder.seckill.common.Toolbox;
 import com.nowcoder.seckill.entity.User;
 import com.nowcoder.seckill.service.FileService;
 import com.nowcoder.seckill.service.ShareRecordsService;
-import com.nowcoder.seckill.service.UserService;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -20,8 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.Random;
-import java.io.*;
 
 @Controller
 @RequestMapping("/filetransfer")
@@ -60,9 +53,31 @@ public class FileTransferController implements ErrorCode {
             throw new BusinessException(USER_NOT_LOGIN, "请先登录！");
         }
         try {
-            fileService.save(file, shareRecordId, user.getId());
+            fileService.saveShareImg(file, shareRecordId, user.getId());
         } catch (Exception e) {
             shareRecordsService.rollbackShareRecord(shareRecordId);
+            throw e;
+        }
+
+        return new ResponseModel();
+    }
+
+    @RequestMapping(value="/uploadprofilepic", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseModel uploadProfilePic(@RequestParam("file") MultipartFile file, HttpSession session) {
+
+        Float fileSize = Float.parseFloat(String.valueOf(file.getSize())) / 1024;
+
+        if (fileSize > fileSizeLimit) {
+            throw new BusinessException(FILE_SIZE_LIMIT, "文件体积超出限制！");
+        }
+        User user = (User) session.getAttribute("loginUser");
+        if (user == null) {
+            throw new BusinessException(USER_NOT_LOGIN, "请先登录！");
+        }
+        try {
+            fileService.saveProfilePic(file, user.getId());
+        } catch (Exception e) {
             throw e;
         }
 
@@ -85,7 +100,7 @@ public class FileTransferController implements ErrorCode {
             throw new BusinessException(USER_NOT_LOGIN, "请先登录！");
         }
         try {
-            fileService.save(file, shareRecordId, user.getId());
+            fileService.saveShareImg(file, shareRecordId, user.getId());
         } catch (Exception e) {
             throw e;
         }
@@ -95,7 +110,7 @@ public class FileTransferController implements ErrorCode {
 
     @RequestMapping(path = "/download", method = RequestMethod.GET)
     @ResponseBody
-    public void getFile(HttpServletRequest request, HttpServletResponse response,
+    public void getShareImg(HttpServletRequest request, HttpServletResponse response,
                         HttpSession session,
                         @RequestParam("recordid") String shareRecordId,
                         @RequestParam("filename") String fileName) {
@@ -103,7 +118,19 @@ public class FileTransferController implements ErrorCode {
         if (user == null) {
             throw new BusinessException(USER_NOT_LOGIN, "请先登录！");
         }
-        fileService.getFile(request, response, shareRecordId, fileName);
+        fileService.getShareImg(request, response, shareRecordId, fileName);
+        return;
+    }
+
+    @RequestMapping(path = "/downloadprofilepic", method = RequestMethod.GET)
+    @ResponseBody
+    public void getProfilePic(HttpServletRequest request, HttpServletResponse response,
+                        HttpSession session) {
+        User user = (User) session.getAttribute("loginUser");
+        if (user == null) {
+            throw new BusinessException(USER_NOT_LOGIN, "请先登录！");
+        }
+        fileService.getProfilePicImg(request, response, user.getId());
         return;
     }
 }

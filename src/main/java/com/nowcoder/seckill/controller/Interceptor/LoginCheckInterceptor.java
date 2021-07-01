@@ -33,6 +33,7 @@ public class LoginCheckInterceptor implements HandlerInterceptor, ErrorCode {
             writer.write(JSONObject.toJSONString(model));
             return false;
         }
+        System.out.println("[Login User] TIME: " + System.currentTimeMillis());
         return true;
     }
 

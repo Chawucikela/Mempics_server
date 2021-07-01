@@ -137,6 +137,16 @@ Body-Type: null
 Parameter: []
 
 
+### 获取正在关注本用户的用户列表
+
+Path: /user/getfollower
+
+Method: GET
+
+Body-Type: null
+
+Parameter: []
+
 
 ### 根据Nickname模糊查询用户
 
@@ -159,6 +169,30 @@ Method: GET
 Body-Type: null
 
 Parameter: [id]
+
+
+
+### 上传头像图片
+
+Path: /filetransfer/uploadprofilepic
+
+Method: POST
+
+Body-Type: form-data
+
+Parameter: [file]
+
+
+
+### 下载头像
+
+Path: /filetransfer/downloadprofilepic
+
+Method: GET
+
+Body-Type: null
+
+Parameter: []
 
 ------
 
@@ -207,6 +241,17 @@ Body-Type: null
 Parameter: []
 
 
+### 获取正在关注本用户的用户列表
+
+Path: /user/getfollower
+
+Method: GET
+
+Body-Type: null
+
+Parameter: []
+
+
 
 ### 根据Nickname模糊查询用户
 
@@ -229,6 +274,30 @@ Method: GET
 Body-Type: null
 
 Parameter: [id]
+
+
+
+### 上传头像图片
+
+Path: /filetransfer/uploadprofilepic
+
+Method: POST
+
+Body-Type: form-data
+
+Parameter: [file]
+
+
+
+### 下载头像
+
+Path: /filetransfer/downloadprofilepic
+
+Method: GET
+
+Body-Type: null
+
+Parameter: []
 
 
 
