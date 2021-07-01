@@ -26,4 +26,6 @@ public interface UserService {
     List<User> searchByPhone(String phone);
 
     List<User> searchByNickname(String nickname);
+
+    List<User> searchByUsername(String username);
 }

@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService, ErrorCode {
         try {
             userMapper.insert(user);
         } catch (DuplicateKeyException e) {
-            throw new BusinessException(PARAMETER_ERROR, "该手机号已注册！");
+            throw new BusinessException(PARAMETER_ERROR, "该手机号或用户名已注册！");
         }
     }
 
@@ -65,11 +65,19 @@ public class UserServiceImpl implements UserService, ErrorCode {
     }
 
     public User findUserById(int id) {
-        return userMapper.selectByPrimaryKey(id);
+        User user = userMapper.selectByPrimaryKey(id);
+        if (user == null) {
+            throw new BusinessException(USER_NOT_FOUND, "找不到用户！");
+        }
+        return user;
     }
 
     public User findUserdetailById(int id) {
-        return userMapper.selectUserDetailByPrimaryKey(id);
+        User user = userMapper.selectUserDetailByPrimaryKey(id);
+        if (user == null) {
+            throw new BusinessException(USER_NOT_FOUND, "找不到用户！");
+        }
+        return user;
     }
 
     @Transactional
@@ -121,11 +129,17 @@ public class UserServiceImpl implements UserService, ErrorCode {
     }
 
     public List<User> searchByPhone(String phone) {
-        return null;
+        List<User> resultSet = userMapper.searchByPhoneSimplified(phone);
+        return resultSet;
     }
 
     public List<User> searchByNickname(String nickname) {
-        List<User> resultSet = userMapper.selectByNicknameSimplified(nickname);
+        List<User> resultSet = userMapper.searchByNicknameSimplified(nickname);
+        return resultSet;
+    }
+
+    public List<User> searchByUsername(String username) {
+        List<User> resultSet = userMapper.searchByUsernameSimplified(username);
         return resultSet;
     }
 
