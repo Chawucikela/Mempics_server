@@ -146,6 +146,12 @@ public class UserController implements ErrorCode {
     @ResponseBody
     public ResponseModel searchUser(@RequestParam("keyword") String keyword, HttpSession session) {
         List<User> resultSet = userService.searchByNickname(keyword);
+        List<User> userSearchedByName = userService.searchByUsername(keyword);
+        List<User> userSearchedByPhone = userService.searchByPhone(keyword);
+        resultSet.addAll(userSearchedByName);
+        resultSet.addAll(userSearchedByPhone);
+//        resultSet.add(userSearchedByPhone);
+//        resultSet.add(userSearchedByName);
         return new ResponseModel(resultSet);
     }
 
