@@ -304,7 +304,6 @@ Parameter: []
 ## 数据库
 
 ### 新增表 `share_records_img_relation`
-
 ```sql
 DROP TABLE IF EXISTS `share_records_img_relation`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -321,7 +320,6 @@ CREATE TABLE `share_records_img_relation` (
 
 
 ### 修改表 `user_info`
-
 ```sql
 DROP TABLE IF EXISTS `user_info`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
