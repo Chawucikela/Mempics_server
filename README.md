@@ -148,7 +148,7 @@ Body-Type: null
 Parameter: []
 
 
-### 根据Nickname模糊查询用户
+### 根据Phone, Username, Nickname模糊查询用户
 
 Path: /user/searchuser
 
@@ -253,7 +253,7 @@ Parameter: []
 
 
 
-### 根据Nickname模糊查询用户
+### 根据Phone, Username, Nickname模糊查询用户
 
 Path: /user/searchuser
 
@@ -303,23 +303,40 @@ Parameter: []
 
 ## 数据库
 
+### 新增表 `share_records_img_relation`
+
 ```sql
-DROP TABLE IF EXISTS share_records_img_relation;`
+DROP TABLE IF EXISTS `share_records_img_relation`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `share_records_img_relation` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `share_record_id` varchar(50) NOT NULL,
+  `file_name` varchar(100) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-`/*!40101 SET @saved_cs_client   = @@character_set_client */;`
+```
 
-`/*!50503 SET character_set_client = utf8mb4 */;`
 
-`CREATE TABLE share_records_img_relation (`
 
- `id int NOT NULL AUTO_INCREMENT,`
+### 修改表 `user_info`
 
- `share_record_id varchar(50) NOT NULL,`
-
- `file_name varchar(100) NOT NULL DEFAULT '',`
-
- `PRIMARY KEY (id)`
-
-`) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+```sql
+DROP TABLE IF EXISTS `user_info`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `user_info` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `phone` varchar(20) NOT NULL DEFAULT '',
+  `username` varchar(20) NOT NULL DEFAULT '',
+  `password` varchar(100) NOT NULL DEFAULT '',
+  `nickname` varchar(100) NOT NULL DEFAULT '',
+  `gender` tinyint NOT NULL DEFAULT '0',
+  `age` int NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `phone_UNIQUE` (`phone`),
+  UNIQUE KEY `username_UNIQUE` (`username`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 ```
 

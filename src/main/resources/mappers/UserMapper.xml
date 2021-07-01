@@ -84,25 +84,25 @@
   <!-- ============================================================================ -->
 
   <select id="selectByPrimaryKeySimplified" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select id, phone, username, nickname, gender, age
+    select id, phone, username, gender
     from user_info
     where id = #{id,jdbcType=INTEGER}
   </select>
 
   <select id="searchByPhoneSimplified" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select id, phone, username, nickname, gender, age
+    select id, phone, username, gender
     from user_info
     where phone like CONCAT('%', #{phone,jdbcType=VARCHAR}, '%')
   </select>
 
   <select id="searchByNicknameSimplified" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select id, phone, username, nickname, gender, age
+    select id, phone, username, gender
     from user_info
     where nickname like CONCAT('%', #{nickname,jdbcType=VARCHAR}, '%')
   </select>
 
   <select id="searchByUsernameSimplified" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select id, phone, username, nickname, gender, age
+    select id, phone, username, gender
     from user_info
     where username like CONCAT('%', #{username,jdbcType=VARCHAR}, '%')
   </select>
