@@ -111,7 +111,13 @@ public class UserServiceImpl implements UserService, ErrorCode {
     }
 
     public List<User> getFollowerUserList(int followingUserId) {
-        return null;
+        List<User> resultSet= new ArrayList<User>();
+        List<Relationship> relationships = relationshipMapper.selectFollowerUser(followingUserId);
+        for (Relationship relationship : relationships) {
+            User user = userMapper.selectByPrimaryKeySimplified(relationship.getUserId());
+            resultSet.add(user);
+        }
+        return resultSet;
     }
 
     public List<User> searchByPhone(String phone) {
