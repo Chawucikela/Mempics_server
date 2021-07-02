@@ -65,6 +65,9 @@
 
   <!-- ============================================================================ -->
 
+  <resultMap id="FilenameMap" type="java.lang.String">
+  </resultMap>
+
   <select id="selectByShareRecordId" parameterType="java.lang.String" resultMap="BaseResultMap">
     select id, share_record_id, file_name
     from share_records_img_relation
@@ -75,4 +78,18 @@
     delete from share_records_img_relation
     where share_record_id = #{id,jdbcType=INTEGER}
   </delete>
+
+  <select id="selectFilenameByShareRecordId" parameterType="java.lang.String" resultMap="FilenameMap">
+    select file_name
+    from share_records_img_relation
+    where share_record_id = #{id,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectOneFilenameByShareRecordId" parameterType="java.lang.String" resultMap="FilenameMap">
+    select file_name
+    from share_records_img_relation
+    where share_record_id = #{id,jdbcType=VARCHAR}
+    order by file_name
+    limit 0, 1
+  </select>
 </mapper>

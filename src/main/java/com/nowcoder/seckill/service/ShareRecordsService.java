@@ -1,7 +1,8 @@
 package com.nowcoder.seckill.service;
 
-import com.nowcoder.seckill.entity.ShareRecordsWithImg;
-import com.nowcoder.seckill.entity.User;
+import com.nowcoder.seckill.entity.resultentity.ShareRecordResult;
+import com.nowcoder.seckill.entity.resultentity.ShareRecordSimplifiedResult;
+import com.nowcoder.seckill.entity.resultentity.ShareRecordsWithImg;
 import com.nowcoder.seckill.entity.ShareRecords;
 
 import java.util.List;
@@ -9,9 +10,9 @@ import java.util.List;
 public interface ShareRecordsService {
     ShareRecords publish(int userId, String title ,String description);
 
-    ShareRecordsWithImg getShareRecord(String shareRecordId);
+    ShareRecordResult getShareRecord(String shareRecordId);
 
-    List<ShareRecordsWithImg> getShareRecordsByUser(int userId);
+    List<ShareRecordResult> getShareRecordsByUser(int userId);
 
     void deleteShareRecord(String shareRecordId);
 

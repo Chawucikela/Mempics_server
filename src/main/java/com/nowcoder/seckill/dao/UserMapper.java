@@ -1,6 +1,8 @@
 package com.nowcoder.seckill.dao;
 
 import com.nowcoder.seckill.entity.User;
+import com.nowcoder.seckill.entity.resultentity.UserResult;
+import com.nowcoder.seckill.entity.resultentity.UserSimplifiedResult;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -55,13 +57,13 @@ public interface UserMapper {
      */
     User selectByPhone(String phone);
 
-    User selectByPrimaryKeySimplified(Integer id);
+    UserResult selectByPrimaryKeySimplified(Integer id);
 
-    List<User> searchByPhoneSimplified(String phone);
+    List<UserResult> searchByPhoneSimplified(String phone);
 
-    List<User> searchByNicknameSimplified(String nickname);
+    List<UserResult> searchByNicknameSimplified(String nickname);
 
-    List<User> searchByUsernameSimplified(String username);
+    List<UserResult> searchByUsernameSimplified(String username);
 
-    User selectUserDetailByPrimaryKey(Integer id);
+    UserResult selectUserDetailByPrimaryKey(Integer id);
 }

@@ -1,5 +1,8 @@
 package com.nowcoder.seckill.entity;
 
+import com.nowcoder.seckill.entity.resultentity.UserDetailedResult;
+import com.nowcoder.seckill.entity.resultentity.UserResult;
+
 public class User {
     /**
      *
@@ -230,5 +233,17 @@ public class User {
      */
     public void setAge(Integer age) {
         this.age = age;
+    }
+
+    public UserResult toUserResult() {
+
+        UserDetailedResult userResult = new UserDetailedResult();
+        userResult.setId(this.id);
+        userResult.setUsername(this.username);
+        userResult.setNickname(this.nickname);
+        userResult.setPhone(this.phone);
+        userResult.setAge(this.age);
+        userResult.setGender(this.gender);
+        return userResult;
     }
 }

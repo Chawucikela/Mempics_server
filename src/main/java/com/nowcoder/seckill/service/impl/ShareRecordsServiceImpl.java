@@ -3,22 +3,22 @@ package com.nowcoder.seckill.service.impl;
 import com.nowcoder.seckill.common.BusinessException;
 import com.nowcoder.seckill.common.ErrorCode;
 import com.nowcoder.seckill.common.Toolbox;
-import com.nowcoder.seckill.component.ObjectValidator;
 import com.nowcoder.seckill.dao.SRIRelationMapper;
 import com.nowcoder.seckill.dao.SerialNumberMapper;
 import com.nowcoder.seckill.dao.ShareRecordsMapper;
 import com.nowcoder.seckill.dao.UserMapper;
 import com.nowcoder.seckill.entity.*;
+import com.nowcoder.seckill.entity.resultentity.ShareRecordDetailedResult;
+import com.nowcoder.seckill.entity.resultentity.ShareRecordResult;
+import com.nowcoder.seckill.entity.resultentity.ShareRecordSimplifiedResult;
+import com.nowcoder.seckill.entity.resultentity.ShareRecordsWithImg;
 import com.nowcoder.seckill.service.FileService;
 import com.nowcoder.seckill.service.ShareRecordsService;
 import com.nowcoder.seckill.service.UserService;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import sun.security.util.Debug;
 
 import java.sql.Timestamp;
 import java.util.*;
@@ -100,15 +100,15 @@ public class ShareRecordsServiceImpl implements ShareRecordsService, ErrorCode{
     }
 
     @Transactional
-    public ShareRecordsWithImg getShareRecord(String shareRecordId) {
-        ShareRecords shareRecord = shareRecordsMapper.selectByPrimaryKey(shareRecordId);
+    public ShareRecordResult getShareRecord(String shareRecordId) {
+        ShareRecordResult shareRecord = shareRecordsMapper.selectByPrimaryKeyDetailed(shareRecordId);
         if (shareRecord == null) {
             throw new BusinessException(RECORD_NOT_FOUND, "找不到指定条目！");
         }
-        ShareRecordsWithImg shareRecordsWithImg = new ShareRecordsWithImg();
-        shareRecordsWithImg.setShareRecords(shareRecord);
-        List<SRIRelation> fileRelation = sriRelationMapper.selectByShareRecordId(shareRecord.getId());
-        shareRecordsWithImg.setFileNameList(fileRelation);
+//        ShareRecordsWithImg shareRecordsWithImg = new ShareRecordsWithImg();
+//        shareRecordsWithImg.setShareRecords(shareRecord);
+        ((ShareRecordDetailedResult)shareRecord).setFileNames(sriRelationMapper.selectFilenameByShareRecordId(((ShareRecordDetailedResult)shareRecord).getId()));
+//        shareRecordsWithImg.setFileNameList(fileRelation);
 
 //        String[] fileList = fileService.getFileNameList(shareRecordId);
 //        if (fileList == null) {
@@ -117,19 +117,20 @@ public class ShareRecordsServiceImpl implements ShareRecordsService, ErrorCode{
 //        else {
 //            shareRecordsWithImg.setFileNameList(Arrays.asList(fileList.clone()));
 //        }
-        return shareRecordsWithImg;
+        return shareRecord;
     }
 
     @Transactional
-    public List<ShareRecordsWithImg> getShareRecordsByUser(int userId) {
-        List<ShareRecordsWithImg> resultSet= new ArrayList<ShareRecordsWithImg>();
-        List<ShareRecords> shareRecordsList = shareRecordsMapper.selectByUserId(userId);
-        for (ShareRecords shareRecords : shareRecordsList) {
-            ShareRecordsWithImg shareRecordsWithImg = new ShareRecordsWithImg();
-            shareRecordsWithImg.setShareRecords(shareRecords);
-            List<SRIRelation> fileRelation = sriRelationMapper.selectByShareRecordId(shareRecords.getId());
-            shareRecordsWithImg.setFileNameList(fileRelation);
-            resultSet.add(shareRecordsWithImg);
+    public List<ShareRecordResult> getShareRecordsByUser(int userId) {
+//        List<ShareRecordsWithImg> resultSet= new ArrayList<ShareRecordsWithImg>();
+        List<ShareRecordResult> resultSet = shareRecordsMapper.selectByUserIdSimplified(userId);
+        for (ShareRecordResult shareRecords : resultSet) {
+//            ShareRecordsWithImg shareRecordsWithImg = new ShareRecordsWithImg();
+//            shareRecordsWithImg.setShareRecords(shareRecords);
+//            System.out.println(sriRelationMapper.selectOneFilenameByShareRecordId(((ShareRecordSimplifiedResult) shareRecords).getId()));
+            ((ShareRecordSimplifiedResult)shareRecords).setFileName(sriRelationMapper.selectOneFilenameByShareRecordId(((ShareRecordSimplifiedResult) shareRecords).getId()));
+//            shareRecordsWithImg.setFileNameList(fileRelation);
+//            resultSet.add(shareRecordsWithImg);
         }
         return resultSet;
     }

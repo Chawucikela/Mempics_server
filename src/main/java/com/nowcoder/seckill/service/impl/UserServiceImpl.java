@@ -7,6 +7,8 @@ import com.nowcoder.seckill.dao.RelationshipMapper;
 import com.nowcoder.seckill.dao.UserMapper;
 import com.nowcoder.seckill.entity.Relationship;
 import com.nowcoder.seckill.entity.User;
+import com.nowcoder.seckill.entity.resultentity.UserResult;
+import com.nowcoder.seckill.entity.resultentity.UserSimplifiedResult;
 import com.nowcoder.seckill.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,8 +74,8 @@ public class UserServiceImpl implements UserService, ErrorCode {
         return user;
     }
 
-    public User findUserdetailById(int id) {
-        User user = userMapper.selectUserDetailByPrimaryKey(id);
+    public UserResult findUserDetailById(int id) {
+        UserResult user = userMapper.selectUserDetailByPrimaryKey(id);
         if (user == null) {
             throw new BusinessException(USER_NOT_FOUND, "找不到用户！");
         }
@@ -108,38 +110,39 @@ public class UserServiceImpl implements UserService, ErrorCode {
         }
     }
 
-    public List<User> getFollowingUserList(int usreId) {
-        List<User> resultSet= new ArrayList<User>();
-        List<Relationship> relationships = relationshipMapper.selectFollowingUser(usreId);
-        for (Relationship relationship : relationships) {
-            User user = userMapper.selectByPrimaryKeySimplified(relationship.getFollowingUserId());
-            resultSet.add(user);
-        }
+    public List<UserResult> getFollowingUserList(int usreId) {
+//        List<UserResult> resultSet= new ArrayList<UserResult>();
+        List<UserResult> resultSet = relationshipMapper.selectFollowingUser(usreId);
+//        for (Relationship relationship : relationships) {
+//            UserResult user = userMapper.selectByPrimaryKeySimplified(relationship.getFollowingUserId());
+//            resultSet.add(user);
+//        }
         return resultSet;
     }
 
-    public List<User> getFollowerUserList(int followingUserId) {
-        List<User> resultSet= new ArrayList<User>();
-        List<Relationship> relationships = relationshipMapper.selectFollowerUser(followingUserId);
-        for (Relationship relationship : relationships) {
-            User user = userMapper.selectByPrimaryKeySimplified(relationship.getUserId());
-            resultSet.add(user);
-        }
+    public List<UserResult> getFollowerUserList(int followingUserId) {
+//        List<UserResult> resultSet= new ArrayList<UserResult>();
+        List<UserResult> resultSet = relationshipMapper.selectFollowerUser(followingUserId);
+//        for (Relationship relationship : relationships) {
+//            UserResult user = userMapper.selectByPrimaryKeySimplified(relationship.getUserId());
+//            resultSet.add(user);
+//            System.out.println(user.getClass().equals(UserSimplifiedResult.class));
+//        }
         return resultSet;
     }
 
-    public List<User> searchByPhone(String phone) {
-        List<User> resultSet = userMapper.searchByPhoneSimplified(phone);
+    public List<UserResult> searchByPhone(String phone) {
+        List<UserResult> resultSet = userMapper.searchByPhoneSimplified(phone);
         return resultSet;
     }
 
-    public List<User> searchByNickname(String nickname) {
-        List<User> resultSet = userMapper.searchByNicknameSimplified(nickname);
+    public List<UserResult> searchByNickname(String nickname) {
+        List<UserResult> resultSet = userMapper.searchByNicknameSimplified(nickname);
         return resultSet;
     }
 
-    public List<User> searchByUsername(String username) {
-        List<User> resultSet = userMapper.searchByUsernameSimplified(username);
+    public List<UserResult> searchByUsername(String username) {
+        List<UserResult> resultSet = userMapper.searchByUsernameSimplified(username);
         return resultSet;
     }
 

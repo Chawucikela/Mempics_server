@@ -1,6 +1,7 @@
 package com.nowcoder.seckill.dao;
 
 import com.nowcoder.seckill.entity.Relationship;
+import com.nowcoder.seckill.entity.resultentity.UserResult;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -49,9 +50,9 @@ public interface RelationshipMapper {
 
     int deleteByUserIds(Integer userId, Integer followingUserId);
 
-    List<Relationship> selectFollowingUser(Integer userId);
+    List<UserResult> selectFollowingUser(Integer userId);
 
-    List<Relationship> selectFollowerUser(Integer followingUserId);
+    List<UserResult> selectFollowerUser(Integer followingUserId);
 
     Relationship selectByUserIds(Integer userId, Integer followingUserId);
 }

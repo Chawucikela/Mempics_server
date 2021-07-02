@@ -5,6 +5,7 @@ import com.nowcoder.seckill.common.ErrorCode;
 import com.nowcoder.seckill.common.ResponseModel;
 import com.nowcoder.seckill.common.Toolbox;
 import com.nowcoder.seckill.entity.User;
+import com.nowcoder.seckill.entity.resultentity.UserResult;
 import com.nowcoder.seckill.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -81,7 +82,7 @@ public class UserController implements ErrorCode {
         User user = userService.login(phone, md5pwd);
         session.setAttribute("loginUser", user);
 
-        return new ResponseModel(user);
+        return new ResponseModel(user.toUserResult());
     }
 
     @RequestMapping(path = "/logout", method = RequestMethod.GET)
@@ -95,7 +96,9 @@ public class UserController implements ErrorCode {
     @ResponseBody
     public ResponseModel getUser(HttpSession session) {
         User user = (User) session.getAttribute("loginUser");
-        return new ResponseModel(user);
+        User user1 = userService.findUserById(user.getId());
+        session.setAttribute("loginUser", user1);
+        return new ResponseModel(user1.toUserResult());
     }
 
     @RequestMapping(path = "/follow", method = RequestMethod.GET)
@@ -127,7 +130,7 @@ public class UserController implements ErrorCode {
         if (user == null) {
             throw new BusinessException(USER_NOT_LOGIN, "请先登录！");
         }
-        List<User> resultSet =  userService.getFollowingUserList(user.getId());
+        List<UserResult> resultSet =  userService.getFollowingUserList(user.getId());
         return new ResponseModel(resultSet);
     }
 
@@ -138,16 +141,16 @@ public class UserController implements ErrorCode {
         if (user == null) {
             throw new BusinessException(USER_NOT_LOGIN, "请先登录！");
         }
-        List<User> resultSet =  userService.getFollowerUserList(user.getId());
+        List<UserResult> resultSet =  userService.getFollowerUserList(user.getId());
         return new ResponseModel(resultSet);
     }
 
     @RequestMapping(path = "/searchuser", method = RequestMethod.GET)
     @ResponseBody
     public ResponseModel searchUser(@RequestParam("keyword") String keyword, HttpSession session) {
-        List<User> resultSet = userService.searchByNickname(keyword);
-        List<User> userSearchedByName = userService.searchByUsername(keyword);
-        List<User> userSearchedByPhone = userService.searchByPhone(keyword);
+        List<UserResult> resultSet = userService.searchByNickname(keyword);
+        List<UserResult> userSearchedByName = userService.searchByUsername(keyword);
+        List<UserResult> userSearchedByPhone = userService.searchByPhone(keyword);
         resultSet.addAll(userSearchedByName);
         resultSet.addAll(userSearchedByPhone);
 //        resultSet.add(userSearchedByPhone);
@@ -157,8 +160,8 @@ public class UserController implements ErrorCode {
 
     @RequestMapping(path = "/getuserinfo", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseModel gethUser(@RequestParam("id") int id, HttpSession session) {
-        User user = userService.findUserdetailById(id);
+    public ResponseModel getUserInfo(@RequestParam("id") int id, HttpSession session) {
+        UserResult user = userService.findUserDetailById(id);
         return new ResponseModel(user);
     }
 }

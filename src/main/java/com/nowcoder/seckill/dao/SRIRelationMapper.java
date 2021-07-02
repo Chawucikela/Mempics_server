@@ -50,4 +50,8 @@ public interface SRIRelationMapper {
     List<SRIRelation> selectByShareRecordId(String id);
 
     int deleteByShareRecordId(String id);
+
+    List<String> selectFilenameByShareRecordId(String id);
+
+    String selectOneFilenameByShareRecordId(String id);
 }

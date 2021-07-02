@@ -1,6 +1,8 @@
 package com.nowcoder.seckill.dao;
 
 import com.nowcoder.seckill.entity.ShareRecords;
+import com.nowcoder.seckill.entity.resultentity.ShareRecordResult;
+import com.nowcoder.seckill.entity.resultentity.ShareRecordSimplifiedResult;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -47,5 +49,7 @@ public interface ShareRecordsMapper {
      */
     int updateByPrimaryKey(ShareRecords record);
 
-    List<ShareRecords> selectByUserId(int userId);
+    ShareRecordResult selectByPrimaryKeyDetailed(String id);
+
+    List<ShareRecordResult> selectByUserIdSimplified(int UserId);
 }

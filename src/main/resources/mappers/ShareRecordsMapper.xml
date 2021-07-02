@@ -69,8 +69,28 @@
 
   <!-- ============================================================================ -->
 
-  <select id="selectByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  <resultMap id="ShareRecordSimplifiedMap" type="com.nowcoder.seckill.entity.resultentity.ShareRecordSimplifiedResult">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+  </resultMap>
+
+  <resultMap id="ShareRecordDetailedMap" type="com.nowcoder.seckill.entity.resultentity.ShareRecordDetailedResult">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="share_time" jdbcType="TIMESTAMP" property="shareTime" />
+  </resultMap>
+
+  <select id="selectByPrimaryKeyDetailed" parameterType="java.lang.String" resultMap="ShareRecordDetailedMap">
     select id, user_id, title, description, share_time
+    from share_records
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByUserIdSimplified" parameterType="java.lang.Integer" resultMap="ShareRecordSimplifiedMap">
+    select id, user_id, title
     from share_records
     where user_id = #{userId,jdbcType=INTEGER}
   </select>

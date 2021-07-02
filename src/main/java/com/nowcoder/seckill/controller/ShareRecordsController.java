@@ -3,11 +3,11 @@ package com.nowcoder.seckill.controller;
 import com.nowcoder.seckill.common.BusinessException;
 import com.nowcoder.seckill.common.ErrorCode;
 import com.nowcoder.seckill.common.ResponseModel;
-import com.nowcoder.seckill.dao.ShareRecordsMapper;
-import com.nowcoder.seckill.entity.ShareRecordsWithImg;
+import com.nowcoder.seckill.entity.resultentity.ShareRecordResult;
+import com.nowcoder.seckill.entity.resultentity.ShareRecordSimplifiedResult;
+import com.nowcoder.seckill.entity.resultentity.ShareRecordsWithImg;
 import com.nowcoder.seckill.entity.User;
 import com.nowcoder.seckill.entity.ShareRecords;
-import com.nowcoder.seckill.service.OrderService;
 import com.nowcoder.seckill.service.ShareRecordsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -44,7 +44,7 @@ public class ShareRecordsController implements ErrorCode {
             throw new BusinessException(USER_NOT_LOGIN, "请先登录！");
         }
 
-        List<ShareRecordsWithImg> resultSet = shareRecordsService.getShareRecordsByUser(user.getId());
+        List<ShareRecordResult> resultSet = shareRecordsService.getShareRecordsByUser(user.getId());
         return new ResponseModel(resultSet);
     }
 
@@ -56,8 +56,8 @@ public class ShareRecordsController implements ErrorCode {
             throw new BusinessException(USER_NOT_LOGIN, "请先登录！");
         }
 
-        ShareRecordsWithImg shareRecordsWithImg = shareRecordsService.getShareRecord(shareRecordId);
-        return new ResponseModel(shareRecordsWithImg);
+        ShareRecordResult shareRecord = shareRecordsService.getShareRecord(shareRecordId);
+        return new ResponseModel(shareRecord);
     }
 
     @RequestMapping(path = "/deletepublish", method = RequestMethod.GET)

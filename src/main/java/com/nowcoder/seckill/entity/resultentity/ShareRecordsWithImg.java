@@ -1,4 +1,7 @@
-package com.nowcoder.seckill.entity;
+package com.nowcoder.seckill.entity.resultentity;
+
+import com.nowcoder.seckill.entity.SRIRelation;
+import com.nowcoder.seckill.entity.ShareRecords;
 
 import java.util.List;
 
