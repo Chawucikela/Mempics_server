@@ -14,7 +14,7 @@ Parameter: [phone, password]
 
 
 
-### 发布
+### 发布动态
 
 Path: /share/publish
 
@@ -26,7 +26,7 @@ Parameter: [title, description]
 
 
 
-### 获得我的发布
+### 获得我的动态
 
 Path: /share/allmypublish
 
@@ -38,7 +38,31 @@ Parameter: null
 
 
 
-### 获得单条发布
+### 获得其他用户的动态
+
+Path: /share/allhispublish
+
+Method: GET
+
+Body-Type: null
+
+Parameter: [uid]
+
+
+
+### 获得关注用户的动态
+
+Path: /share/friendspublish
+
+Method: GET
+
+Body-Type: null
+
+Parameter: null
+
+
+
+### 获得单条动态
 
 Path: /share/getpublish
 
@@ -86,7 +110,7 @@ Parameter: [recordid, filename]
 
 
 
-### 删除发布
+### 删除动态
 
 Path: /share/deletepublish
 
@@ -134,7 +158,7 @@ Method: GET
 
 Body-Type: null
 
-Parameter: []
+Parameter: null
 
 
 ### 获取正在关注本用户的用户列表
@@ -145,7 +169,7 @@ Method: GET
 
 Body-Type: null
 
-Parameter: []
+Parameter: null
 
 
 ### 根据Phone, Username, Nickname模糊查询用户
@@ -202,102 +226,29 @@ Parameter: [uid]
 
 ## 接口（加粗为更新内容）
 
-### 关注用户
-
-Path: /user/follow
-
-Method: GET
-
-Body-Type: null
-
-Parameter: [id]
-
-解释：id为被关注用户的id
 
 
+### 获得其他用户的动态
 
-### 取消关注用户
-
-Path: /user/unfollow
+Path: /share/allhispublish
 
 Method: GET
 
 Body-Type: null
 
-Parameter: [id]
-
-解释：id为被关注用户的id
+Parameter: [uid]
 
 
 
-### 获取本用户正在关注的用户列表
+### 获得关注用户的动态
 
-Path: /user/getfollowing
+Path: /share/friendspublish
 
 Method: GET
 
 Body-Type: null
 
-Parameter: []
-
-
-### 获取正在关注本用户的用户列表
-
-Path: /user/getfollower
-
-Method: GET
-
-Body-Type: null
-
-Parameter: []
-
-
-
-### 根据Phone, Username, Nickname模糊查询用户
-
-Path: /user/searchuser
-
-Method: GET
-
-Body-Type: null
-
-Parameter: [keyword]
-
-
-
-### 根据用户ID获得用户详情
-
-Path:/user/getuserinfo
-
-Method: GET
-
-Body-Type: null
-
-Parameter: [id]
-
-
-
-### 上传头像图片
-
-Path: /filetransfer/uploadprofilepic
-
-Method: POST
-
-Body-Type: form-data
-
-Parameter: [file]
-
-
-
-### 下载头像
-
-Path: /filetransfer/downloadprofilepic
-
-Method: GET
-
-Body-Type: null
-
-Parameter: []
+Parameter: null
 
 
 

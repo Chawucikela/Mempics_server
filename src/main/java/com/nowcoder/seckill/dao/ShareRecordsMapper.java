@@ -52,4 +52,6 @@ public interface ShareRecordsMapper {
     ShareRecordResult selectByPrimaryKeyDetailed(String id);
 
     List<ShareRecordResult> selectByUserIdSimplified(int UserId);
+
+    List<ShareRecordResult> selectFriendsSRByUserIdSimplified(int UserId);
 }

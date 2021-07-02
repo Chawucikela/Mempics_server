@@ -12,6 +12,8 @@ public interface ShareRecordsService {
 
     List<ShareRecordResult> getShareRecordsByUser(int userId);
 
+    List<ShareRecordResult> getFriendsShareRecordsByUser(int userId);
+
     void deleteShareRecord(String shareRecordId);
 
     void rollbackShareRecord(String shareRecordId);

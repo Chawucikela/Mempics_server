@@ -46,6 +46,30 @@ public class ShareRecordsController implements ErrorCode {
         return new ResponseModel(resultSet);
     }
 
+    @RequestMapping(path = "/allhispublish", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseModel getOtherUserShareRecords(@RequestParam("uid") int userId, HttpSession session) {
+        User user = (User) session.getAttribute("loginUser");
+        if (user == null) {
+            throw new BusinessException(USER_NOT_LOGIN, "请先登录！");
+        }
+
+        List<ShareRecordResult> resultSet = shareRecordsService.getShareRecordsByUser(userId);
+        return new ResponseModel(resultSet);
+    }
+
+    @RequestMapping(path = "/friendspublish", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseModel getFriendsShareRecords(HttpSession session) {
+        User user = (User) session.getAttribute("loginUser");
+        if (user == null) {
+            throw new BusinessException(USER_NOT_LOGIN, "请先登录！");
+        }
+
+        List<ShareRecordResult> resultSet = shareRecordsService.getFriendsShareRecordsByUser(user.getId());
+        return new ResponseModel(resultSet);
+    }
+
     @RequestMapping(path = "/getpublish", method = RequestMethod.GET)
     @ResponseBody
     public ResponseModel getpublish(@RequestParam("id") String shareRecordId, HttpSession session) {

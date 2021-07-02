@@ -104,32 +104,29 @@ public class ShareRecordsServiceImpl implements ShareRecordsService, ErrorCode{
         if (shareRecord == null) {
             throw new BusinessException(RECORD_NOT_FOUND, "找不到指定条目！");
         }
-//        ShareRecordsWithImg shareRecordsWithImg = new ShareRecordsWithImg();
-//        shareRecordsWithImg.setShareRecords(shareRecord);
-        ((ShareRecordDetailedResult)shareRecord).setFileNames(sriRelationMapper.selectFilenameByShareRecordId(((ShareRecordDetailedResult)shareRecord).getId()));
-//        shareRecordsWithImg.setFileNameList(fileRelation);
 
-//        String[] fileList = fileService.getFileNameList(shareRecordId);
-//        if (fileList == null) {
-//            shareRecordsWithImg.setFileNameList(null);
-//        }
-//        else {
-//            shareRecordsWithImg.setFileNameList(Arrays.asList(fileList.clone()));
-//        }
+        ((ShareRecordDetailedResult)shareRecord).setFileNames(sriRelationMapper
+                .selectFilenameByShareRecordId(((ShareRecordDetailedResult)shareRecord).getId()));
+
         return shareRecord;
     }
 
     @Transactional
     public List<ShareRecordResult> getShareRecordsByUser(int userId) {
-//        List<ShareRecordsWithImg> resultSet= new ArrayList<ShareRecordsWithImg>();
         List<ShareRecordResult> resultSet = shareRecordsMapper.selectByUserIdSimplified(userId);
         for (ShareRecordResult shareRecords : resultSet) {
-//            ShareRecordsWithImg shareRecordsWithImg = new ShareRecordsWithImg();
-//            shareRecordsWithImg.setShareRecords(shareRecords);
-//            System.out.println(sriRelationMapper.selectOneFilenameByShareRecordId(((ShareRecordSimplifiedResult) shareRecords).getId()));
-            ((ShareRecordSimplifiedResult)shareRecords).setFileName(sriRelationMapper.selectOneFilenameByShareRecordId(((ShareRecordSimplifiedResult) shareRecords).getId()));
-//            shareRecordsWithImg.setFileNameList(fileRelation);
-//            resultSet.add(shareRecordsWithImg);
+            ((ShareRecordSimplifiedResult)shareRecords).setFileName(sriRelationMapper
+                    .selectOneFilenameByShareRecordId(((ShareRecordSimplifiedResult) shareRecords).getId()));
+        }
+        return resultSet;
+    }
+
+    @Transactional
+    public List<ShareRecordResult> getFriendsShareRecordsByUser(int userId) {
+        List<ShareRecordResult> resultSet = shareRecordsMapper.selectFriendsSRByUserIdSimplified(userId);
+        for (ShareRecordResult shareRecords : resultSet) {
+            ((ShareRecordSimplifiedResult)shareRecords).setFileName(sriRelationMapper
+                    .selectOneFilenameByShareRecordId(((ShareRecordSimplifiedResult) shareRecords).getId()));
         }
         return resultSet;
     }
