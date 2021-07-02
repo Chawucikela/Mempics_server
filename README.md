@@ -192,7 +192,7 @@ Method: GET
 
 Body-Type: null
 
-Parameter: []
+Parameter: [uid]
 
 ------
 

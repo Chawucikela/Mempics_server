@@ -114,23 +114,15 @@ public class FileTransferController implements ErrorCode {
                         HttpSession session,
                         @RequestParam("recordid") String shareRecordId,
                         @RequestParam("filename") String fileName) {
-        User user = (User) session.getAttribute("loginUser");
-        if (user == null) {
-            throw new BusinessException(USER_NOT_LOGIN, "请先登录！");
-        }
         fileService.getShareImg(request, response, shareRecordId, fileName);
         return;
     }
 
     @RequestMapping(path = "/downloadprofilepic", method = RequestMethod.GET)
     @ResponseBody
-    public void getProfilePic(HttpServletRequest request, HttpServletResponse response,
+    public void getProfilePic(@RequestParam("uid") int id, HttpServletRequest request, HttpServletResponse response,
                         HttpSession session) {
-        User user = (User) session.getAttribute("loginUser");
-        if (user == null) {
-            throw new BusinessException(USER_NOT_LOGIN, "请先登录！");
-        }
-        fileService.getProfilePicImg(request, response, user.getId());
+        fileService.getProfilePicImg(request, response, id);
         return;
     }
 }

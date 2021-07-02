@@ -16,7 +16,6 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(loginCheckInterceptor).addPathPatterns("/order/create");
         registry.addInterceptor(loginCheckInterceptor).addPathPatterns("/share");
-        registry.addInterceptor(loginCheckInterceptor).addPathPatterns("/filetransfer/download");
     }
 
 }
