@@ -1,8 +1,6 @@
 package com.nowcoder.seckill.service;
 
 import com.nowcoder.seckill.entity.resultentity.ShareRecordResult;
-import com.nowcoder.seckill.entity.resultentity.ShareRecordSimplifiedResult;
-import com.nowcoder.seckill.entity.resultentity.ShareRecordsWithImg;
 import com.nowcoder.seckill.entity.ShareRecords;
 
 import java.util.List;

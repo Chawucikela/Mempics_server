@@ -246,4 +246,17 @@ public class User {
         userResult.setGender(this.gender);
         return userResult;
     }
+
+    public Boolean isParamsValid() {
+        if (this.phone == null) {
+            return false;
+        }
+        if (this.password == null) {
+            return false;
+        }
+        if (this.username == null) {
+            return false;
+        }
+        return true;
+    }
 }

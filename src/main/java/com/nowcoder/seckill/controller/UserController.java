@@ -54,13 +54,16 @@ public class UserController implements ErrorCode {
     @ResponseBody
     public ResponseModel register(String otp, User user, HttpSession session) {
         // 验证OTPd
+        if(!user.isParamsValid()) {
+            throw new BusinessException(PARAMETER_ERROR, "参数不全！");
+        }
+
         String realOTP = (String) session.getAttribute(user.getPhone());
         if (StringUtils.isEmpty(otp)
                 || StringUtils.isEmpty(realOTP)
                 || !StringUtils.equals(otp, realOTP)) {
             throw new BusinessException(PARAMETER_ERROR, "验证码不正确！");
         }
-
         // 加密处理
         user.setPassword(Toolbox.md5(user.getPassword()));
 

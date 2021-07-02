@@ -11,7 +11,6 @@ import com.nowcoder.seckill.entity.*;
 import com.nowcoder.seckill.entity.resultentity.ShareRecordDetailedResult;
 import com.nowcoder.seckill.entity.resultentity.ShareRecordResult;
 import com.nowcoder.seckill.entity.resultentity.ShareRecordSimplifiedResult;
-import com.nowcoder.seckill.entity.resultentity.ShareRecordsWithImg;
 import com.nowcoder.seckill.service.FileService;
 import com.nowcoder.seckill.service.ShareRecordsService;
 import com.nowcoder.seckill.service.UserService;

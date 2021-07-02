@@ -4,8 +4,6 @@ import com.nowcoder.seckill.common.BusinessException;
 import com.nowcoder.seckill.common.ErrorCode;
 import com.nowcoder.seckill.common.ResponseModel;
 import com.nowcoder.seckill.entity.resultentity.ShareRecordResult;
-import com.nowcoder.seckill.entity.resultentity.ShareRecordSimplifiedResult;
-import com.nowcoder.seckill.entity.resultentity.ShareRecordsWithImg;
 import com.nowcoder.seckill.entity.User;
 import com.nowcoder.seckill.entity.ShareRecords;
 import com.nowcoder.seckill.service.ShareRecordsService;
