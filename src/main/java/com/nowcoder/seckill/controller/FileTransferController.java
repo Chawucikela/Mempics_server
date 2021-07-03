@@ -29,11 +29,6 @@ public class FileTransferController implements ErrorCode {
     @Value("${file.size-limit}")
     private Float fileSizeLimit;
 
-    @RequestMapping(value="/uploadPage")
-    public String uploadPage(){
-        return "uploadPage";
-    }
-
     @RequestMapping(value="/newShareImg", method = RequestMethod.POST)
     @ResponseBody
     public ResponseModel newImgToShareRecord(@RequestParam("file") MultipartFile file, String shareRecordId, HttpSession session) {
@@ -48,10 +43,7 @@ public class FileTransferController implements ErrorCode {
             throw new BusinessException(FILE_SIZE_LIMIT, "文件体积超出限制！");
         }
         User user = (User) session.getAttribute("loginUser");
-        if (user == null) {
-            shareRecordsService.rollbackShareRecord(shareRecordId);
-            throw new BusinessException(USER_NOT_LOGIN, "请先登录！");
-        }
+
         try {
             fileService.saveShareImg(file, shareRecordId, user.getId());
         } catch (Exception e) {
@@ -72,9 +64,7 @@ public class FileTransferController implements ErrorCode {
             throw new BusinessException(FILE_SIZE_LIMIT, "文件体积超出限制！");
         }
         User user = (User) session.getAttribute("loginUser");
-        if (user == null) {
-            throw new BusinessException(USER_NOT_LOGIN, "请先登录！");
-        }
+
         try {
             fileService.saveProfilePic(file, user.getId());
         } catch (Exception e) {
@@ -96,9 +86,7 @@ public class FileTransferController implements ErrorCode {
             throw new BusinessException(FILE_SIZE_LIMIT, "文件体积超出限制！");
         }
         User user = (User) session.getAttribute("loginUser");
-        if (user == null) {
-            throw new BusinessException(USER_NOT_LOGIN, "请先登录！");
-        }
+
         try {
             fileService.saveShareImg(file, shareRecordId, user.getId());
         } catch (Exception e) {

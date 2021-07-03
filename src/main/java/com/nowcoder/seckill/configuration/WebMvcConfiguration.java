@@ -14,8 +14,22 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(loginCheckInterceptor).addPathPatterns("/order/create");
-        registry.addInterceptor(loginCheckInterceptor).addPathPatterns("/share");
+
+        registry.addInterceptor(loginCheckInterceptor).addPathPatterns("/user/logout");
+        registry.addInterceptor(loginCheckInterceptor).addPathPatterns("/user/status");
+        registry.addInterceptor(loginCheckInterceptor).addPathPatterns("/user/follow");
+        registry.addInterceptor(loginCheckInterceptor).addPathPatterns("/user/unfollow");
+        registry.addInterceptor(loginCheckInterceptor).addPathPatterns("/user/getfollowing");
+        registry.addInterceptor(loginCheckInterceptor).addPathPatterns("/user/getfollower");
+
+        registry.addInterceptor(loginCheckInterceptor).addPathPatterns("/share/publish");
+        registry.addInterceptor(loginCheckInterceptor).addPathPatterns("/share/allmypublish");
+        registry.addInterceptor(loginCheckInterceptor).addPathPatterns("/share/friendspublish");
+        registry.addInterceptor(loginCheckInterceptor).addPathPatterns("/share/deletepublish");
+
+        registry.addInterceptor(loginCheckInterceptor).addPathPatterns("/filetransfer/newShareImg");
+        registry.addInterceptor(loginCheckInterceptor).addPathPatterns("/filetransfer/uploadprofilepic");
+        registry.addInterceptor(loginCheckInterceptor).addPathPatterns("/filetransfer/addShareImg");
     }
 
 }

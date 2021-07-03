@@ -108,9 +108,7 @@ public class UserController implements ErrorCode {
     @ResponseBody
     public ResponseModel follow(@RequestParam("id") int followingUserId, HttpSession session) {
         User user = (User) session.getAttribute("loginUser");
-        if (user == null) {
-            throw new BusinessException(USER_NOT_LOGIN, "请先登录！");
-        }
+
         userService.addRelationship(user.getId(), followingUserId);
         return new ResponseModel();
     }
@@ -130,9 +128,7 @@ public class UserController implements ErrorCode {
     @ResponseBody
     public ResponseModel getFollowingUsers(HttpSession session) {
         User user = (User) session.getAttribute("loginUser");
-        if (user == null) {
-            throw new BusinessException(USER_NOT_LOGIN, "请先登录！");
-        }
+
         List<UserResult> resultSet =  userService.getFollowingUserList(user.getId());
         return new ResponseModel(resultSet);
     }
@@ -141,9 +137,7 @@ public class UserController implements ErrorCode {
     @ResponseBody
     public ResponseModel getFollowerUsers(HttpSession session) {
         User user = (User) session.getAttribute("loginUser");
-        if (user == null) {
-            throw new BusinessException(USER_NOT_LOGIN, "请先登录！");
-        }
+
         List<UserResult> resultSet =  userService.getFollowerUserList(user.getId());
         return new ResponseModel(resultSet);
     }

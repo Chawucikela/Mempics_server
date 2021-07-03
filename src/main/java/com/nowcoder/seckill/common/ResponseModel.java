@@ -1,5 +1,7 @@
 package com.nowcoder.seckill.common;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 public class ResponseModel {
 
     // 状态常量
@@ -7,8 +9,10 @@ public class ResponseModel {
     public static final int STATUS_FAILURE = 1;
 
     // 业务状态
+    @JSONField(ordinal = 1)
     private int status;
     // 业务数据
+    @JSONField(ordinal = 2)
     private Object data;
 
     public ResponseModel() {

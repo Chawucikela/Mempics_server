@@ -26,9 +26,7 @@ public class ShareRecordsController implements ErrorCode {
     @ResponseBody
     public ResponseModel publish(HttpSession session, String title ,String description) {
         User user = (User) session.getAttribute("loginUser");
-        if (user == null) {
-            throw new BusinessException(USER_NOT_LOGIN, "请先登录！");
-        }
+
         ShareRecords shareRecords = shareRecordsService.publish(user.getId(), title, description);
         shareRecords.setUserId(0);
         return new ResponseModel(shareRecords);
@@ -38,9 +36,6 @@ public class ShareRecordsController implements ErrorCode {
     @ResponseBody
     public ResponseModel getUserShareRecords(HttpSession session) {
         User user = (User) session.getAttribute("loginUser");
-        if (user == null) {
-            throw new BusinessException(USER_NOT_LOGIN, "请先登录！");
-        }
 
         List<ShareRecordResult> resultSet = shareRecordsService.getShareRecordsByUser(user.getId());
         return new ResponseModel(resultSet);
@@ -50,9 +45,6 @@ public class ShareRecordsController implements ErrorCode {
     @ResponseBody
     public ResponseModel getOtherUserShareRecords(@RequestParam("uid") int userId, HttpSession session) {
         User user = (User) session.getAttribute("loginUser");
-        if (user == null) {
-            throw new BusinessException(USER_NOT_LOGIN, "请先登录！");
-        }
 
         List<ShareRecordResult> resultSet = shareRecordsService.getShareRecordsByUser(userId);
         return new ResponseModel(resultSet);
@@ -62,9 +54,6 @@ public class ShareRecordsController implements ErrorCode {
     @ResponseBody
     public ResponseModel getFriendsShareRecords(HttpSession session) {
         User user = (User) session.getAttribute("loginUser");
-        if (user == null) {
-            throw new BusinessException(USER_NOT_LOGIN, "请先登录！");
-        }
 
         List<ShareRecordResult> resultSet = shareRecordsService.getFriendsShareRecordsByUser(user.getId());
         return new ResponseModel(resultSet);
@@ -74,9 +63,6 @@ public class ShareRecordsController implements ErrorCode {
     @ResponseBody
     public ResponseModel getpublish(@RequestParam("id") String shareRecordId, HttpSession session) {
         User user = (User) session.getAttribute("loginUser");
-        if (user == null) {
-            throw new BusinessException(USER_NOT_LOGIN, "请先登录！");
-        }
 
         ShareRecordResult shareRecord = shareRecordsService.getShareRecord(shareRecordId);
         return new ResponseModel(shareRecord);
@@ -86,9 +72,7 @@ public class ShareRecordsController implements ErrorCode {
     @ResponseBody
     public ResponseModel deletePublish(@RequestParam("id") String shareRecordId, HttpSession session) {
         User user = (User) session.getAttribute("loginUser");
-        if (user == null) {
-            throw new BusinessException(USER_NOT_LOGIN, "请先登录！");
-        }
+
         shareRecordsService.deleteShareRecord(shareRecordId);
         return new ResponseModel();
     }
