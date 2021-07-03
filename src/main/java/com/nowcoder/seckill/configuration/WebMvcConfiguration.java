@@ -1,5 +1,6 @@
 package com.nowcoder.seckill.configuration;
 
+import com.nowcoder.seckill.controller.Interceptor.GeneralInterceptor;
 import com.nowcoder.seckill.controller.Interceptor.LoginCheckInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -12,8 +13,13 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     @Autowired
     private LoginCheckInterceptor loginCheckInterceptor;
 
+    @Autowired
+    private GeneralInterceptor generalInterceptor;
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+
+        registry.addInterceptor(generalInterceptor).addPathPatterns("/**");
 
         registry.addInterceptor(loginCheckInterceptor).addPathPatterns("/user/logout");
         registry.addInterceptor(loginCheckInterceptor).addPathPatterns("/user/status");
@@ -30,6 +36,8 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         registry.addInterceptor(loginCheckInterceptor).addPathPatterns("/filetransfer/newShareImg");
         registry.addInterceptor(loginCheckInterceptor).addPathPatterns("/filetransfer/uploadprofilepic");
         registry.addInterceptor(loginCheckInterceptor).addPathPatterns("/filetransfer/addShareImg");
+
+
     }
 
 }

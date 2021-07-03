@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
-public class LoginCheckInterceptor implements HandlerInterceptor, ErrorCode {
+public class GeneralInterceptor implements HandlerInterceptor, ErrorCode {
 
     @Override
     public boolean preHandle(HttpServletRequest request,
@@ -23,17 +23,14 @@ public class LoginCheckInterceptor implements HandlerInterceptor, ErrorCode {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("loginUser");
         if (user == null) {
-            response.setContentType("application/json");
-            response.setCharacterEncoding("utf-8");
-            PrintWriter writer = response.getWriter();
-            Map<Object, Object> data = new HashMap<>();
-            data.put("code", USER_NOT_LOGIN);
-            data.put("message", "用户未登录！");
-            ResponseModel model = new ResponseModel(ResponseModel.STATUS_FAILURE, data);
-            writer.write(JSONObject.toJSONString(model));
-            return false;
+            System.out.println("[User: NOT_LOGIN" + "] TIME: " + System.currentTimeMillis() + " || " + "REQUEST PATH: "
+                    + request.getServletPath());
         }
+        else {
+            System.out.println("[User: " + user.getId() + "] TIME: " + System.currentTimeMillis() + " || " + "REQUEST PATH: "
+                    + request.getServletPath());
+        }
+
         return true;
     }
-
 }
