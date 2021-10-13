@@ -20,8 +20,11 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.Date;
 
@@ -55,7 +58,21 @@ public class FileServiceImpl implements FileService, ErrorCode {
     private String profilePicFileName;
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    private String generateFileNameSerial() {
+    private String generateFileNameSerial(MultipartFile file) {
+    
+        BufferedImage bufferedImage = null; // 通过MultipartFile得到InputStream，从而得到BufferedImage
+        try {
+            bufferedImage = ImageIO.read(file.getInputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (bufferedImage == null) {
+            // 证明上传的文件不是图片，获取图片流失败，不进行下面的操作
+        }
+        assert bufferedImage != null;
+        Integer width = bufferedImage.getWidth();
+        Integer height = bufferedImage.getHeight();
+        
         StringBuilder sb = new StringBuilder();
 
         // 拼入日期
@@ -71,7 +88,7 @@ public class FileServiceImpl implements FileService, ErrorCode {
 
         // 拼入流水号
         String prefix = "000000000000".substring(value.toString().length());
-        sb.append(prefix).append(value);
+        sb.append(prefix).append(value).append("_").append(width).append("_").append(height);
 
         return sb.toString();
     }
@@ -183,7 +200,7 @@ public class FileServiceImpl implements FileService, ErrorCode {
         if (shareRecord.getUserId() != userId) {
             throw new BusinessException(PARAMETER_ERROR, "该发布记录不属于此用户！");
         }
-        String fileName = this.generateFileNameSerial() + "." + suffix;
+        String fileName = this.generateFileNameSerial(file) + "." + suffix;
         try {
             //System.out.println(file.getOriginalFilename());
             File fileDir = new File(rootDirectory + shareDirectory + shareRecordId + "/");

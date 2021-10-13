@@ -6,6 +6,8 @@ import com.nowcoder.seckill.entity.User;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import java.sql.Timestamp;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -21,14 +23,14 @@ public class GeneralInterceptor implements HandlerInterceptor, ErrorCode {
         User user = (User) session.getAttribute("loginUser");
         String ip = Toolbox.getIpAddr(request);
         if (user == null) {
-            System.out.println("[IP: " + ip + " || User: NOT_LOGIN" + "] TIME: " + System.currentTimeMillis() + " || " + "REQUEST PATH: "
-                    + request.getServletPath());
+            System.out.println("[IP: " + ip + " || UserId: NOT_LOGIN" + "] TIME: " + new Timestamp(System.currentTimeMillis()) + " " +
+                                       "|| " + "REQUEST PATH: "
+                    + request.getServletPath() + "]");
         }
         else {
-            System.out.println("[IP: " + ip + " || User: " + user.getId() + "] TIME: " + System.currentTimeMillis() + " || " + "REQUEST PATH: "
-                    + request.getServletPath());
+            System.out.println("[IP: " + ip + " || UserId: " + user.getId() + "] TIME: " + new Timestamp(System.currentTimeMillis()) + " || " + "REQUEST PATH: "
+                    + request.getServletPath() + "]");
         }
-
         return true;
     }
 

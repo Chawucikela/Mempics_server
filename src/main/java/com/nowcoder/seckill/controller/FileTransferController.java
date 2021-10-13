@@ -45,6 +45,7 @@ public class FileTransferController implements ErrorCode {
         User user = (User) session.getAttribute("loginUser");
 
         try {
+            
             fileService.saveShareImg(file, shareRecordId, user.getId());
         } catch (Exception e) {
             shareRecordsService.rollbackShareRecord(shareRecordId);
