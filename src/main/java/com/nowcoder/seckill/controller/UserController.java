@@ -50,7 +50,7 @@ public class UserController implements ErrorCode {
 		// 绑定OTP
 		session.setAttribute(phone, otp);
 		// 发送OTP
-		logger.info("[牛客网] 尊敬的{}您好, 您的注册验证码是{}, 请注意查收!", phone, otp);
+		logger.info("尊敬的{}您好, 您的注册验证码是{}, 请注意查收!", phone, otp);
 		
 		return new ResponseModel();
 	}
@@ -159,6 +159,7 @@ public class UserController implements ErrorCode {
 //        resultSet.add(userSearchedByName);
 		List<UserResult> noDuplicateResult = new ArrayList<>();
 		List<Integer> userIds = new ArrayList<>();
+		//去重
 		for (UserResult userResult : resultSet) {
 			UserSimplifiedResult result = (UserSimplifiedResult) userResult;
 			if (!userIds.contains(result.getId())) {

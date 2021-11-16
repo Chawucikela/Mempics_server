@@ -20,7 +20,7 @@ public interface UserService {
 
     void deleteRelationship(int userId, int followingUserId);
 
-    List<UserResult> getFollowingUserList(int usreId);
+    List<UserResult> getFollowingUserList(int userId);
 
     List<UserResult> getFollowerUserList(int followingUserId);
 

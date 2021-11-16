@@ -110,9 +110,9 @@ public class UserServiceImpl implements UserService, ErrorCode {
         }
     }
 
-    public List<UserResult> getFollowingUserList(int usreId) {
+    public List<UserResult> getFollowingUserList(int userId) {
 //        List<UserResult> resultSet= new ArrayList<UserResult>();
-        List<UserResult> resultSet = relationshipMapper.selectFollowingUser(usreId);
+        List<UserResult> resultSet = relationshipMapper.selectFollowingUser(userId);
 //        for (Relationship relationship : relationships) {
 //            UserResult user = userMapper.selectByPrimaryKeySimplified(relationship.getFollowingUserId());
 //            resultSet.add(user);
