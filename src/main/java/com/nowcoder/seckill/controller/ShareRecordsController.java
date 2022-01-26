@@ -61,7 +61,7 @@ public class ShareRecordsController implements ErrorCode {
 
     @RequestMapping(path = "/getpublish", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseModel getpublish(@RequestParam("id") String shareRecordId, HttpSession session) {
+    public ResponseModel getPublish(@RequestParam("id") String shareRecordId, HttpSession session) {
         User user = (User) session.getAttribute("loginUser");
 
         ShareRecordResult shareRecord = shareRecordsService.getShareRecord(shareRecordId);

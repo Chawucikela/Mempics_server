@@ -61,8 +61,6 @@ public class UserServiceImpl implements UserService, ErrorCode {
         if (user == null || !StringUtils.equals(password, user.getPassword())) {
             throw new BusinessException(USER_LOGIN_FAILURE, "账号或密码错误！");
         }
-
-
         return user;
     }
 

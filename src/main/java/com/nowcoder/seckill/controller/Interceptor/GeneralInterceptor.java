@@ -21,7 +21,7 @@ public class GeneralInterceptor implements HandlerInterceptor, ErrorCode {
                              HttpServletResponse response, Object handler) throws Exception {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("loginUser");
-        String ip = Toolbox.getIpAddr(request);
+        String ip = Toolbox.getIpAddress(request);
         if (user == null) {
             System.out.println("[IP: " + ip + " || UserId: NOT_LOGIN" + "] TIME: " + new Timestamp(System.currentTimeMillis()) + " " +
                                        "|| " + "REQUEST PATH: "
