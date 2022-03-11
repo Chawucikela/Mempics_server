@@ -99,7 +99,7 @@
 	
 	<select id="selectFriendsSRByUserIdSimplified" parameterType="java.lang.Integer"
 	        resultMap="ShareRecordSimplifiedMap">
-		select S.id, user_id, title
+		select S.id, user_id, R1.nickname, title
 		from share_records S
 		inner join
 		(select U.id, U.nickname, U.username, U.gender
@@ -109,8 +109,10 @@
 		where user_id = #{userId,jdbcType=INTEGER}) R1
 		on R1.id = user_id
 		union
-		select id, user_id, title
-		from share_records
+		select S.id, user_id, U.nickname, title
+		from share_records S
+		inner join user_info U
+		on user_id = U.id
 		where user_id = #{userId,jdbcType=INTEGER}
 		order by id DESC;
 	</select>
