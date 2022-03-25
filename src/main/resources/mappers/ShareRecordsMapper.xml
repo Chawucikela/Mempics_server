@@ -91,10 +91,12 @@
 	</select>
 	
 	<select id="selectByUserIdSimplified" parameterType="java.lang.Integer" resultMap="ShareRecordSimplifiedMap">
-		select id, user_id, title
-		from share_records
-		where user_id = #{userId,jdbcType=INTEGER}
-		order by id DESC;
+		select S.id, S.user_id, U.nickname, S.title
+		from share_records S
+		inner join user_info U
+		on S.user_id = U.id
+		where S.user_id = #{userId,jdbcType=INTEGER}
+		order by S.id DESC;
 	</select>
 	
 	<select id="selectFriendsSRByUserIdSimplified" parameterType="java.lang.Integer"

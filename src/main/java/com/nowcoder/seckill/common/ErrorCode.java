@@ -15,7 +15,7 @@ public interface ErrorCode {
     int STOCK_NOT_ENOUGH = 201;
     int RECORD_NOT_FOUND = 404;
 
-    //
+    // 文件异常
     int FILE_UPLOAD_FAILURE = 301;
     int FILE_SIZE_LIMIT = 302;
     int FILE_TYPE_ERROR = 303;

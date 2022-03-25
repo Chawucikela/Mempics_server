@@ -79,11 +79,8 @@ public class ShareRecordsServiceImpl implements ShareRecordsService, ErrorCode{
             throw new BusinessException(PARAMETER_ERROR, "指定的用户不存在！");
         }
 
-        if (title == null
-                || title.isEmpty()
-                || description == null
-                || description.isEmpty()) {
-            throw new BusinessException(PARAMETER_ERROR, "参数不能为空！");
+        if (title == null || title.isEmpty()) {
+            throw new BusinessException(PARAMETER_ERROR, "标题不能为空！");
         }
 
         ShareRecords shareRecords = new ShareRecords();
@@ -134,7 +131,7 @@ public class ShareRecordsServiceImpl implements ShareRecordsService, ErrorCode{
     @Transactional
     public void deleteShareRecord(String shareRecordId) {
         boolean delDirResult = fileService.deleteShareImgDir(shareRecordId);
-        if (delDirResult == false) {
+        if (!delDirResult) {
             throw new BusinessException(FILE_DELETE_FAILURE, "文件路径删除失败！");
         }
         int delRelationResult = sriRelationMapper.deleteByShareRecordId(shareRecordId);

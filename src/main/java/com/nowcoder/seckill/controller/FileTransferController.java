@@ -36,7 +36,7 @@ public class FileTransferController implements ErrorCode {
             shareRecordsService.deleteShareRecord(shareRecordId);
             throw new BusinessException(PARAMETER_ERROR, "参数异常！");
         }
-        Float fileSize = Float.parseFloat(String.valueOf(file.getSize())) / 1024;
+        float fileSize = Float.parseFloat(String.valueOf(file.getSize())) / 1024;
 
         if (fileSize > fileSizeLimit) {
             shareRecordsService.rollbackShareRecord(shareRecordId);
