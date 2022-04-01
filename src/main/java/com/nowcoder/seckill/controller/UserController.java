@@ -129,22 +129,48 @@ public class UserController implements ErrorCode {
 		return new ResponseModel();
 	}
 	
-	@RequestMapping(path = "/getfollowing", method = RequestMethod.GET)
+	@RequestMapping(path = "/getfollower", method = RequestMethod.GET)
 	@ResponseBody
-	public ResponseModel getFollowingUsers(HttpSession session) {
+	public ResponseModel getFollowerUsers(@RequestParam("uid") int userId, HttpSession session) {
 		User user = (User) session.getAttribute("loginUser");
-		
-		List<UserResult> resultSet = userService.getFollowingUserList(user.getId());
+		if (user == null) {
+			throw new BusinessException(USER_NOT_LOGIN, "请先登录！");
+		}
+		List<UserResult> resultSet = userService.getFollowerUserList(userId);
 		return new ResponseModel(resultSet);
 	}
 	
-	@RequestMapping(path = "/getfollower", method = RequestMethod.GET)
+	@RequestMapping(path = "/getfollowing", method = RequestMethod.GET)
 	@ResponseBody
-	public ResponseModel getFollowerUsers(HttpSession session) {
+	public ResponseModel getFollowingUsers(@RequestParam("uid") int userId, HttpSession session) {
 		User user = (User) session.getAttribute("loginUser");
-		
-		List<UserResult> resultSet = userService.getFollowerUserList(user.getId());
+		if (user == null) {
+			throw new BusinessException(USER_NOT_LOGIN, "请先登录！");
+		}
+		List<UserResult> resultSet = userService.getFollowingUserList(userId);
 		return new ResponseModel(resultSet);
+	}
+	
+	@RequestMapping(path = "/getfolloweramount", method = RequestMethod.GET)
+	@ResponseBody
+	public ResponseModel getFollowerAmount(@RequestParam("uid") int userId, HttpSession session) {
+		User user = (User) session.getAttribute("loginUser");
+		if (user == null) {
+			throw new BusinessException(USER_NOT_LOGIN, "请先登录！");
+		}
+		Integer amount = userService.getFollowerUserList(userId).size();
+		return new ResponseModel(amount);
+	}
+	
+	@RequestMapping(path = "/getfollowingamount", method = RequestMethod.GET)
+	@ResponseBody
+	public ResponseModel getFollowingAmount(@RequestParam("uid") int userId, HttpSession session) {
+		User user = (User) session.getAttribute("loginUser");
+		if (user == null) {
+			throw new BusinessException(USER_NOT_LOGIN, "请先登录！");
+		}
+		Integer amount = userService.getFollowingUserList(userId).size();
+		return new ResponseModel(amount);
 	}
 	
 	@RequestMapping(path = "/searchuser", method = RequestMethod.GET)
