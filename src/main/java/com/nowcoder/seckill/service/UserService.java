@@ -1,6 +1,5 @@
 package com.nowcoder.seckill.service;
 
-import com.nowcoder.seckill.entity.Relationship;
 import com.nowcoder.seckill.entity.User;
 import com.nowcoder.seckill.entity.resultentity.UserResult;
 
@@ -19,7 +18,9 @@ public interface UserService {
     void addRelationship(int userId, int followingUserId);
 
     void deleteRelationship(int userId, int followingUserId);
-
+    
+    Integer getRelationshipState(int UserId, int followingUserId);
+    
     List<UserResult> getFollowingUserList(int userId);
 
     List<UserResult> getFollowerUserList(int followingUserId);

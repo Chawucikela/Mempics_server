@@ -8,6 +8,7 @@ import com.nowcoder.seckill.entity.User;
 import com.nowcoder.seckill.entity.resultentity.UserResult;
 import com.nowcoder.seckill.entity.resultentity.UserSimplifiedResult;
 import com.nowcoder.seckill.service.UserService;
+import com.nowcoder.seckill.service.impl.UserServiceImpl;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -109,16 +110,18 @@ public class UserController implements ErrorCode {
 		return new ResponseModel(user1.toUserResult());
 	}
 	
-	@RequestMapping(path = "/follow", method = RequestMethod.GET)
+	/*@RequestMapping(path = "/follow", method = RequestMethod.GET)
 	@ResponseBody
 	public ResponseModel follow(@RequestParam("id") int followingUserId, HttpSession session) {
 		User user = (User) session.getAttribute("loginUser");
-		
+		if (user == null) {
+			throw new BusinessException(USER_NOT_LOGIN, "请先登录！");
+		}
 		userService.addRelationship(user.getId(), followingUserId);
 		return new ResponseModel();
-	}
+	}*/
 	
-	@RequestMapping(path = "/unfollow", method = RequestMethod.GET)
+	/*@RequestMapping(path = "/unfollow", method = RequestMethod.GET)
 	@ResponseBody
 	public ResponseModel unfollow(@RequestParam("id") int followingUserId, HttpSession session) {
 		User user = (User) session.getAttribute("loginUser");
@@ -127,7 +130,7 @@ public class UserController implements ErrorCode {
 		}
 		userService.deleteRelationship(user.getId(), followingUserId);
 		return new ResponseModel();
-	}
+	}*/
 	
 	@RequestMapping(path = "/getfollower", method = RequestMethod.GET)
 	@ResponseBody
@@ -151,6 +154,40 @@ public class UserController implements ErrorCode {
 		return new ResponseModel(resultSet);
 	}
 	
+	@RequestMapping(path = "/getRelationshipState", method = RequestMethod.GET)
+	@ResponseBody
+	public ResponseModel getRelationshipState(@RequestParam("uid") int userId, HttpSession session) {
+		User user = (User) session.getAttribute("loginUser");
+		if (user == null) {
+			throw new BusinessException(USER_NOT_LOGIN, "请先登录！");
+		}
+		Integer result = userService.getRelationshipState(user.getId(), userId);
+		return new ResponseModel(result);
+	}
+	
+	@RequestMapping(path = "/switchRelationshipState", method = RequestMethod.GET)
+	@ResponseBody
+	public ResponseModel switchRelationshipState(@RequestParam("uid") int followingUserId, HttpSession session) {
+		User user = (User) session.getAttribute("loginUser");
+		if (user == null) {
+			throw new BusinessException(USER_NOT_LOGIN, "请先登录！");
+		}
+		Integer state = userService.getRelationshipState(user.getId(), followingUserId);
+		switch (state) {
+			case 0:
+			case 2:
+				userService.addRelationship(user.getId(), followingUserId);
+				break;
+			case 1:
+			case 3:
+				userService.deleteRelationship(user.getId(), followingUserId);
+				break;
+			default:
+		}
+		Integer result = userService.getRelationshipState(user.getId(), followingUserId);
+		return new ResponseModel(result);
+	}
+	
 	@RequestMapping(path = "/getfolloweramount", method = RequestMethod.GET)
 	@ResponseBody
 	public ResponseModel getFollowerAmount(@RequestParam("uid") int userId, HttpSession session) {
@@ -158,8 +195,8 @@ public class UserController implements ErrorCode {
 		if (user == null) {
 			throw new BusinessException(USER_NOT_LOGIN, "请先登录！");
 		}
-		Integer amount = userService.getFollowerUserList(userId).size();
-		return new ResponseModel(amount);
+		Integer result = userService.getFollowerUserList(userId).size();
+		return new ResponseModel(result);
 	}
 	
 	@RequestMapping(path = "/getfollowingamount", method = RequestMethod.GET)
@@ -169,8 +206,8 @@ public class UserController implements ErrorCode {
 		if (user == null) {
 			throw new BusinessException(USER_NOT_LOGIN, "请先登录！");
 		}
-		Integer amount = userService.getFollowingUserList(userId).size();
-		return new ResponseModel(amount);
+		Integer result = userService.getFollowingUserList(userId).size();
+		return new ResponseModel(result);
 	}
 	
 	@RequestMapping(path = "/searchuser", method = RequestMethod.GET)
