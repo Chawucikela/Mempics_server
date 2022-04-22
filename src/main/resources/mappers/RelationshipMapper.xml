@@ -92,11 +92,13 @@
     select U.id, U.nickname, U.username, U.gender
     from relationship R inner join user_info U on R.following_user_id = U.id
     where user_id = #{userId,jdbcType=INTEGER}
+    order by R.following_time DESC;
   </select>
 
   <select id="selectFollowerUser" parameterType="java.lang.Integer" resultMap="UserSimplifiedMap">
     select U.id, U.nickname, U.username, U.gender
     from relationship R inner join user_info U on R.user_id = U.id
     where following_user_id = #{followingUserId,jdbcType=INTEGER}
+    order by R.following_time DESC;
   </select>
 </mapper>
