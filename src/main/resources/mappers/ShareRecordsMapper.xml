@@ -91,7 +91,7 @@
 	</select>
 	
 	<select id="selectByUserIdSimplified" parameterType="java.lang.Integer" resultMap="ShareRecordSimplifiedMap">
-		select S.id, S.user_id, U.nickname, S.title
+		select S.id, S.user_id, U.username, S.title
 		from share_records S
 		inner join user_info U
 		on S.user_id = U.id
@@ -101,17 +101,17 @@
 	
 	<select id="selectFriendsSRByUserIdSimplified" parameterType="java.lang.Integer"
 	        resultMap="ShareRecordSimplifiedMap">
-		select S.id, user_id, R1.nickname, title
+		select S.id, user_id, R1.username, title
 		from share_records S
 		inner join
-		(select U.id, U.nickname, U.username, U.gender
+		(select U.id, U.username, U.gender
 		from relationship R
 		inner join user_info U
 		on R.following_user_id = U.id
 		where user_id = #{userId,jdbcType=INTEGER}) R1
 		on R1.id = user_id
 		union
-		select S.id, user_id, U.nickname, title
+		select S.id, user_id, U.username, title
 		from share_records S
 		inner join user_info U
 		on user_id = U.id

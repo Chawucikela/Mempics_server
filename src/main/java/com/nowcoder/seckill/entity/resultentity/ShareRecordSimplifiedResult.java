@@ -5,7 +5,7 @@ public class ShareRecordSimplifiedResult extends ShareRecordResult{
 
     private Integer userId;
     
-    private String nickname;
+    private String username;
 
     private String title;
 
@@ -27,12 +27,12 @@ public class ShareRecordSimplifiedResult extends ShareRecordResult{
         this.userId = userId;
     }
     
-    public String getNickname() {
-        return nickname;
+    public String getUsername() {
+        return username;
     }
     
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
+    public void setUsername(String nickname) {
+        this.username = nickname;
     }
     
     public String getTitle() {
