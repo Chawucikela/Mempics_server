@@ -35,6 +35,19 @@ public class ShareRecordsController implements ErrorCode {
 		return new ResponseModel(shareRecords);
 	}
 	
+	@RequestMapping(path = "/getPostsByUser", method = RequestMethod.GET)
+	@ResponseBody
+	public ResponseModel getPostsByUser(@RequestParam("uid") int userId,
+	                                    @RequestParam("page") int page,
+	                                    @RequestParam("itemCount") int itemCount,
+	                                    HttpSession session) {
+		User user = (User) session.getAttribute("loginUser");
+		if (user == null) throw new BusinessException(USER_NOT_LOGIN, "请先登录！");
+		
+		List<ShareRecordResult> resultSet = shareRecordsService.getPostsByUser(userId, page, itemCount);
+		return new ResponseModel(resultSet);
+	}
+	
 	@RequestMapping(path = "/allmypublish", method = RequestMethod.GET)
 	@ResponseBody
 	public ResponseModel getUserShareRecords(HttpSession session) {

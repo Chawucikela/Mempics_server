@@ -50,7 +50,7 @@ public class ShareRecordsServiceImpl implements ShareRecordsService, ErrorCode{
      * @return
      */
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    private String generateOrderID() {
+    public String generateOrderID() {
         StringBuilder sb = new StringBuilder();
 
         // 拼入日期
@@ -117,7 +117,13 @@ public class ShareRecordsServiceImpl implements ShareRecordsService, ErrorCode{
         }
         return resultSet;
     }
-
+    
+    @Override
+    public List<ShareRecordResult> getPostsByUser(int userId, int page, int itemCount) {
+        
+        return null;
+    }
+    
     @Transactional
     public List<ShareRecordResult> getFriendsShareRecordsByUser(int userId) {
         List<ShareRecordResult> resultSet = shareRecordsMapper.selectFriendsSRByUserIdSimplified(userId);

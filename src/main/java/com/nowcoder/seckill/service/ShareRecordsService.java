@@ -11,6 +11,8 @@ public interface ShareRecordsService {
     ShareRecordResult getShareRecord(String shareRecordId);
 
     List<ShareRecordResult> getShareRecordsByUser(int userId);
+    
+    List<ShareRecordResult> getPostsByUser(int userId, int page, int itemCount);
 
     List<ShareRecordResult> getFriendsShareRecordsByUser(int userId);
 
